@@ -17,6 +17,10 @@ public partial class User
 
     public string ProfileImageUrl { get; set; } = null!;
 
+    public string Username { get; set; } = null!;
+
+    public string PasswordHash { get; set; } = null!;
+
     public virtual ICollection<ClientProfile> ClientProfiles { get; set; } = new List<ClientProfile>();
 
     public virtual ICollection<Favorite> Favorites { get; set; } = new List<Favorite>();

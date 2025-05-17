@@ -365,6 +365,7 @@ public partial class ProHiveContext : DbContext
             entity.Property(e => e.FullName)
                 .HasMaxLength(255)
                 .HasColumnName("fullName");
+            entity.Property(e => e.PasswordHash).HasColumnName("passwordHash");
             entity.Property(e => e.PhoneNumber)
                 .HasMaxLength(50)
                 .HasColumnName("phoneNumber");
@@ -372,6 +373,9 @@ public partial class ProHiveContext : DbContext
                 .HasMaxLength(255)
                 .HasColumnName("profileImageURL");
             entity.Property(e => e.RoleId).HasColumnName("roleID");
+            entity.Property(e => e.Username)
+                .HasMaxLength(100)
+                .HasColumnName("username");
         });
 
         modelBuilder.Entity<UserRole>(entity =>
