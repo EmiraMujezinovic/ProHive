@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Linq;
 
 namespace backend.Controllers
 {
@@ -131,7 +132,6 @@ namespace backend.Controllers
                     await dto.ProfileImage.CopyToAsync(stream);
                 }
             }
-            // Set profile image url (relative path)
             user.ProfileImageUrl = $"/{ProfileImagesFolder}/{imageFileName}";
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
@@ -146,6 +146,21 @@ namespace backend.Controllers
             };
             _context.FreelancerProfiles.Add(freelancerProfile);
             await _context.SaveChangesAsync();
+
+            // Save selected skills in FreelancerSkills table
+            if (dto.SkillIds != null && dto.SkillIds.Any())
+            {
+                foreach (var skillId in dto.SkillIds)
+                {
+                    var freelancerSkill = new FreelancerSkill
+                    {
+                        FreelancerProfileId = freelancerProfile.FreelancerProfileId,
+                        SkillId = skillId
+                    };
+                    _context.FreelancerSkills.Add(freelancerSkill);
+                }
+                await _context.SaveChangesAsync();
+            }
 
             // Set primary role
             var userRole = new UserRole

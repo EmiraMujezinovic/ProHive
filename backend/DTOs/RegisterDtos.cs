@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 
 namespace backend.DTOs
 {
@@ -33,5 +34,7 @@ namespace backend.DTOs
         public string ExperianceLevel { get; set; } = null!;
         public string Bio { get; set; } = null!;
         public string Location { get; set; } = null!;
+        // List of selected skill IDs
+        public List<int> SkillIds { get; set; } = new();
     }
 }
