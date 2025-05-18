@@ -1,16 +1,21 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import Login from './pages/Login';
+import ClientDashboard from './pages/ClientDashboard';
+import FreelancerDashboard from './pages/FreelancerDashboard';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <h1 className='mt-2 bg-background text-text text-2xl'>Hello world</h1>
-    </>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/clientdashboard" element={<ClientDashboard />} />
+        <Route path="/freelancerdashboard" element={<FreelancerDashboard />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App

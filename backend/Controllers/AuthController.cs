@@ -195,7 +195,22 @@ namespace backend.Controllers
 
             // Generate JWT token
             var token = GenerateJwtToken(user, primaryRole);
-            return Ok(new { token, role = primaryRole });
+
+            // Return token, role, and user info
+            return Ok(new
+            {
+                token,
+                role = primaryRole,
+                user = new
+                {
+                    userId = user.UserId,
+                    username = user.Username,
+                    email = user.Email,
+                    profileImageUrl = user.ProfileImageUrl,
+                    fullName = user.FullName,
+                    phoneNumber = user.PhoneNumber
+                }
+            });
         }
 
         // Helper to get role id by name

@@ -288,7 +288,6 @@ public partial class ProHiveContext : DbContext
             entity.Property(e => e.RoleId).HasColumnName("roleID");
             entity.Property(e => e.Role1)
                 .HasMaxLength(50)
-                .IsFixedLength()
                 .HasColumnName("role");
         });
 

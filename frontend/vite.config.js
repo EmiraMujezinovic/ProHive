@@ -8,7 +8,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:7156',
+        target: 'https://localhost:7156', // koristi HTTPS
         changeOrigin: true,
         secure: false,
       },
