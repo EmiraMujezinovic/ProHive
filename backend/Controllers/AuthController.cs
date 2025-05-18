@@ -1,7 +1,6 @@
 ﻿using backend.DTOs;
 using backend.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -17,16 +16,21 @@ namespace backend.Controllers
     {
         private readonly ProHiveContext _context;
         private readonly IConfiguration _configuration;
+        private readonly IWebHostEnvironment _env;
+        private const string ProfileImagesFolder = "profile-images";
+        private const string DefaultImageName = "default.png";
 
-        public AuthController(ProHiveContext context, IConfiguration configuration)
+        public AuthController(ProHiveContext context, IConfiguration configuration, IWebHostEnvironment env)
         {
             _context = context;
             _configuration = configuration;
+            _env = env;
         }
 
         // POST: api/Auth/register/client
         [HttpPost("register/client")]
-        public async Task<IActionResult> RegisterClient([FromBody] RegisterClientDto dto)
+        [RequestSizeLimit(10_000_000)] // Limit upload size to 10MB
+        public async Task<IActionResult> RegisterClient([FromForm] RegisterClientDto dto)
         {
             // Check if username or email already exists
             if (await _context.Users.AnyAsync(u => u.Username == dto.Username || u.Email == dto.Email))
@@ -35,18 +39,34 @@ namespace backend.Controllers
             // Hash password and store in PasswordHash
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
 
-            // Create user
+            // Create user first to get UserId
             var user = new User
             {
                 Username = dto.Username,
                 Email = dto.Email,
                 FullName = dto.FullName,
                 PhoneNumber = dto.PhoneNumber,
-                ProfileImageUrl = dto.ProfileImageUrl, // Now used only for image path
-                PasswordHash = passwordHash, // Store hash here
+                PasswordHash = passwordHash,
                 RoleId = await GetRoleId("Client"),
+                ProfileImageUrl = string.Empty // Will set after file save
             };
             _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            // Handle profile image upload
+            string imageFileName = DefaultImageName;
+            if (dto.ProfileImage != null && dto.ProfileImage.Length > 0)
+            {
+                imageFileName = $"{user.UserId}{Path.GetExtension(dto.ProfileImage.FileName)}";
+                var savePath = Path.Combine(_env.WebRootPath, ProfileImagesFolder, imageFileName);
+                using (var stream = new FileStream(savePath, FileMode.Create))
+                {
+                    await dto.ProfileImage.CopyToAsync(stream);
+                }
+            }
+            // Set profile image url (relative path)
+            user.ProfileImageUrl = $"/{ProfileImagesFolder}/{imageFileName}";
+            _context.Users.Update(user);
             await _context.SaveChangesAsync();
 
             // Create client profile
@@ -76,7 +96,8 @@ namespace backend.Controllers
 
         // POST: api/Auth/register/freelancer
         [HttpPost("register/freelancer")]
-        public async Task<IActionResult> RegisterFreelancer([FromBody] RegisterFreelancerDto dto)
+        [RequestSizeLimit(10_000_000)] // Limit upload size to 10MB
+        public async Task<IActionResult> RegisterFreelancer([FromForm] RegisterFreelancerDto dto)
         {
             // Check if username or email already exists
             if (await _context.Users.AnyAsync(u => u.Username == dto.Username || u.Email == dto.Email))
@@ -85,18 +106,34 @@ namespace backend.Controllers
             // Hash password and store in PasswordHash
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
 
-            // Create user
+            // Create user first to get UserId
             var user = new User
             {
                 Username = dto.Username,
                 Email = dto.Email,
                 FullName = dto.FullName,
                 PhoneNumber = dto.PhoneNumber,
-                ProfileImageUrl = dto.ProfileImageUrl, // Now used only for image path
-                PasswordHash = passwordHash, // Store hash here
+                PasswordHash = passwordHash,
                 RoleId = await GetRoleId("Freelancer"),
+                ProfileImageUrl = string.Empty // Will set after file save
             };
             _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            // Handle profile image upload
+            string imageFileName = DefaultImageName;
+            if (dto.ProfileImage != null && dto.ProfileImage.Length > 0)
+            {
+                imageFileName = $"{user.UserId}{Path.GetExtension(dto.ProfileImage.FileName)}";
+                var savePath = Path.Combine(_env.WebRootPath, ProfileImagesFolder, imageFileName);
+                using (var stream = new FileStream(savePath, FileMode.Create))
+                {
+                    await dto.ProfileImage.CopyToAsync(stream);
+                }
+            }
+            // Set profile image url (relative path)
+            user.ProfileImageUrl = $"/{ProfileImagesFolder}/{imageFileName}";
+            _context.Users.Update(user);
             await _context.SaveChangesAsync();
 
             // Create freelancer profile

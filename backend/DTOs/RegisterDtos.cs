@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+
 namespace backend.DTOs
 {
     // DTO for registering a client
@@ -8,7 +10,8 @@ namespace backend.DTOs
         public string Email { get; set; } = null!;
         public string FullName { get; set; } = null!;
         public string PhoneNumber { get; set; } = null!;
-        public string ProfileImageUrl { get; set; } = null!;
+        // Profile image file (optional)
+        public IFormFile? ProfileImage { get; set; }
         // ClientProfile fields
         public string CompanyName { get; set; } = null!;
         public string JobTitle { get; set; } = null!;
@@ -24,7 +27,8 @@ namespace backend.DTOs
         public string Email { get; set; } = null!;
         public string FullName { get; set; } = null!;
         public string PhoneNumber { get; set; } = null!;
-        public string ProfileImageUrl { get; set; } = null!;
+        // Profile image file (optional)
+        public IFormFile? ProfileImage { get; set; }
         // FreelancerProfile fields
         public string ExperianceLevel { get; set; } = null!;
         public string Bio { get; set; } = null!;
