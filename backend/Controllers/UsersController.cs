@@ -39,5 +39,16 @@ namespace backend.Controllers
                 user.RoleId
             });
         }
+
+        // GET: api/Users/check-username?username=someusername
+        // Checks if a username is already taken (for frontend async validation)
+        [HttpGet("check-username")]
+        [AllowAnonymous]
+        public async Task<IActionResult> CheckUsername([FromQuery] string username)
+        {
+            // Check if any user exists with the given username
+            var exists = await _context.Users.AnyAsync(u => u.Username == username);
+            return Ok(new { exists });
+        }
     }
 }

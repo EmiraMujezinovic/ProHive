@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\User\\Desktop\\ProHive\\backend\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{4D08909B-85D7-4828-9F17-AA7C08FFAF73}|backend.csproj|c:\\users\\user\\desktop\\prohive\\backend\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4D08909B-85D7-4828-9F17-AA7C08FFAF73}|backend.csproj|solutionrelative:controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{4D08909B-85D7-4828-9F17-AA7C08FFAF73}|backend.csproj|c:\\users\\user\\desktop\\prohive\\backend\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{4D08909B-85D7-4828-9F17-AA7C08FFAF73}|backend.csproj|solutionrelative:controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -13,10 +17,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{4D08909B-85D7-4828-9F17-AA7C08FFAF73}|backend.csproj|c:\\users\\user\\desktop\\prohive\\backend\\models\\prohivecontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{4D08909B-85D7-4828-9F17-AA7C08FFAF73}|backend.csproj|solutionrelative:models\\prohivecontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4D08909B-85D7-4828-9F17-AA7C08FFAF73}|backend.csproj|c:\\users\\user\\desktop\\prohive\\backend\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4D08909B-85D7-4828-9F17-AA7C08FFAF73}|backend.csproj|solutionrelative:controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{4D08909B-85D7-4828-9F17-AA7C08FFAF73}|backend.csproj|c:\\users\\user\\desktop\\prohive\\backend\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
@@ -34,7 +34,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -46,7 +46,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "ProHiveContext.cs",
               "DocumentMoniker": "C:\\Users\\User\\Desktop\\ProHive\\backend\\Models\\ProHiveContext.cs",
               "RelativeDocumentMoniker": "Models\\ProHiveContext.cs",
@@ -58,19 +58,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "UsersController.cs",
               "DocumentMoniker": "C:\\Users\\User\\Desktop\\ProHive\\backend\\Controllers\\UsersController.cs",
               "RelativeDocumentMoniker": "Controllers\\UsersController.cs",
               "ToolTip": "C:\\Users\\User\\Desktop\\ProHive\\backend\\Controllers\\UsersController.cs",
               "RelativeToolTip": "Controllers\\UsersController.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAAzwCsAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAACAAAAAAAAAAAAAWwDYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-18T10:59:46.092Z"
+              "WhenOpened": "2025-05-18T10:59:46.092Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "AuthController.cs",
               "DocumentMoniker": "C:\\Users\\User\\Desktop\\ProHive\\backend\\Controllers\\AuthController.cs",
               "RelativeDocumentMoniker": "Controllers\\AuthController.cs",
@@ -95,7 +96,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\User\\Desktop\\ProHive\\backend\\appsettings.json",
               "RelativeDocumentMoniker": "appsettings.json",
