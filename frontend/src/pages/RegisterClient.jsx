@@ -1,4 +1,6 @@
 import React, { useState, useRef } from 'react';
+import CommonRegisterFields from '../components/CommonRegisterFields';
+import RegistrationSuccessModal from '../components/RegistrationSuccessModal';
 import InputField from '../components/InputField';
 
 const RegisterClient = () => {
@@ -16,7 +18,6 @@ const RegisterClient = () => {
     profileImage: null
   });
   const [errors, setErrors] = useState({});
-  const [success, setSuccess] = useState(false);
   const [serverError, setServerError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -43,7 +44,7 @@ const RegisterClient = () => {
     if (!field || field === 'password') {
       if (!form.password) {
         newErrors.password = '';
-      } else if (form.password.length < 7) { // ispravljeno sa <= na <
+      } else if (form.password.length < 7) {
         newErrors.password = 'Password must be at least 8 characters.';
       } else {
         newErrors.password = '';
@@ -59,7 +60,7 @@ const RegisterClient = () => {
         newErrors.email = '';
       }
     }
-    // Ostala polja
+    // Other fields
     if (!field || field === 'fullName') {
       if (!form.fullName) newErrors.fullName = 'Full name is required.';
     }
@@ -81,18 +82,16 @@ const RegisterClient = () => {
     return newErrors;
   };
 
-  // Handle input changes with live validation
-  const handleChange = async (e) => {
+  // Handle input changes with live validation and username check
+  const handleChange = (e) => {
     const { name, value, files } = e.target;
     setForm(prev => ({
       ...prev,
       [name]: files ? files[0] : value
     }));
-    // Live validation for username, password, email
     if (["username", "password", "email"].includes(name)) {
       setErrors(prev => ({ ...prev, ...validate(name, value) }));
     }
-    // Username availability check (debounced)
     if (name === 'username') {
       setUsernameAvailable(null);
       if (usernameTimeout.current) clearTimeout(usernameTimeout.current);
@@ -155,77 +154,22 @@ const RegisterClient = () => {
       <form onSubmit={handleSubmit} className="max-w-lg mx-auto mt-10 p-8 bg-white rounded shadow-md">
         <h2 className="text-2xl font-bold mb-6 text-center">Register as Client</h2>
         {serverError && <div className="mb-4 text-red-600 text-center">{serverError}</div>}
-        <div className="mb-4">
-          <label className="block mb-1">Username</label>
-          <input
-            name="username"
-            value={form.username}
-            onChange={handleChange}
-            className={`w-full px-3 py-2 border rounded ${form.username && (errors.username || usernameAvailable === false) ? 'border-red-500' : form.username && usernameAvailable === true && !errors.username ? 'border-green-500' : ''}`}
-            required
-            autoComplete="off"
-          />
-          {/* Prikaz dostupnosti username-a */}
-          {form.username && usernameAvailable === true && !errors.username && (
-            <div className="text-green-600 text-xs mt-1">Username is available.</div>
-          )}
-          {form.username && usernameAvailable === false && (
-            <div className="text-red-500 text-xs mt-1">Username is already taken.</div>
-          )}
-          {form.username && errors.username && errors.username !== '' && errors.username !== 'Username is already taken.' && (
-            <div className="text-red-500 text-sm mt-1">{errors.username}</div>
-          )}
-        </div>
-        <div className="mb-4">
-          <label className="block mb-1">Password</label>
-          <input
-            name="password"
-            type="password"
-            value={form.password}
-            onChange={handleChange}
-            className={`w-full px-3 py-2 border rounded ${form.password && errors.password ? 'border-red-500' : form.password && !errors.password ? 'border-green-500' : ''}`}
-            required
-          />
-          {form.password && errors.password && errors.password !== '' && (
-            <div className="text-red-500 text-sm mt-1">{errors.password}</div>
-          )}
-        </div>
-        <div className="mb-4">
-          <label className="block mb-1">Email</label>
-          <input
-            name="email"
-            type="email"
-            value={form.email}
-            onChange={handleChange}
-            className={`w-full px-3 py-2 border rounded ${form.email && errors.email ? 'border-red-500' : form.email && !errors.email ? 'border-green-500' : ''}`}
-            required
-          />
-          {form.email && errors.email && errors.email !== '' && (
-            <div className="text-red-500 text-sm mt-1">{errors.email}</div>
-          )}
-        </div>
-        <InputField label="Full Name" name="fullName" value={form.fullName} onChange={handleChange} required />
-        {errors.fullName && <div className="text-red-500 text-sm mb-2">{errors.fullName}</div>}
-        <InputField label="Phone Number" name="phoneNumber" value={form.phoneNumber} onChange={handleChange} required />
-        {errors.phoneNumber && <div className="text-red-500 text-sm mb-2">{errors.phoneNumber}</div>}
-        <InputField label="Company Name" name="companyName" value={form.companyName} onChange={handleChange} required />
-        {errors.companyName && <div className="text-red-500 text-sm mb-2">{errors.companyName}</div>}
-        <InputField label="Job Title" name="jobTitle" value={form.jobTitle} onChange={handleChange} required />
-        {errors.jobTitle && <div className="text-red-500 text-sm mb-2">{errors.jobTitle}</div>}
-        <InputField label="Description" name="description" value={form.description} onChange={handleChange} required />
-        {errors.description && <div className="text-red-500 text-sm mb-2">{errors.description}</div>}
-        <InputField label="Location" name="location" value={form.location} onChange={handleChange} required />
-        {errors.location && <div className="text-red-500 text-sm mb-2">{errors.location}</div>}
-        <div className="mb-4">
-          <label className="block mb-1">Profile Image (optional)</label>
-          <input
-            type="file"
-            name="profileImage"
-            accept="image/*"
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded"
-          />
-        </div>
+        {/* Shared fields via CommonRegisterFields */}
+        <CommonRegisterFields
+          form={form}
+          errors={errors}
+          handleChange={handleChange}
+          usernameAvailable={usernameAvailable}
+          checkingUsername={checkingUsername}
+        >
+          {/* Client-specific fields */}
+          <InputField label="Company Name" name="companyName" value={form.companyName} onChange={handleChange} required />
+          {errors.companyName && <div className="text-red-500 text-sm mb-2">{errors.companyName}</div>}
+          <InputField label="Job Title" name="jobTitle" value={form.jobTitle} onChange={handleChange} required />
+          {errors.jobTitle && <div className="text-red-500 text-sm mb-2">{errors.jobTitle}</div>}
+          <InputField label="Description" name="description" value={form.description} onChange={handleChange} required />
+          {errors.description && <div className="text-red-500 text-sm mb-2">{errors.description}</div>}
+        </CommonRegisterFields>
         <button
           type="submit"
           disabled={loading || usernameAvailable === false || checkingUsername}
@@ -236,18 +180,7 @@ const RegisterClient = () => {
       </form>
       {/* Modal for success */}
       {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
-          <div className="bg-white rounded-lg shadow-lg p-8 max-w-sm w-full text-center">
-            <h3 className="text-xl font-bold mb-4 text-green-700">Registration successful!</h3>
-            <p className="mb-6">You can now log in to your account.</p>
-            <button
-              className="bg-primary text-text px-6 py-2 rounded font-semibold hover:bg-secondary transition"
-              onClick={() => window.location.href = '/login'}
-            >
-              Go to Login
-            </button>
-          </div>
-        </div>
+        <RegistrationSuccessModal onClose={() => window.location.href = '/login'} />
       )}
     </>
   );
