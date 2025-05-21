@@ -28,10 +28,8 @@ const Login = () => {
       }
       const data = await response.json();
       localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify({
-        ...data.user,
-        role: data.role
-      }));
+      localStorage.setItem('userId', data.userId);
+      localStorage.setItem('role', data.role);
       if (data.role === 'Client') {
         navigate('/clientdashboard');
       } else if (data.role === 'Freelancer') {

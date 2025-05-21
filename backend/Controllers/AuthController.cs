@@ -196,20 +196,12 @@ namespace backend.Controllers
             // Generate JWT token
             var token = GenerateJwtToken(user, primaryRole);
 
-            // Return token, role, and user info
+            // Return only token, role, and userId for localstorage
             return Ok(new
             {
                 token,
                 role = primaryRole,
-                user = new
-                {
-                    userId = user.UserId,
-                    username = user.Username,
-                    email = user.Email,
-                    profileImageUrl = user.ProfileImageUrl,
-                    fullName = user.FullName,
-                    phoneNumber = user.PhoneNumber
-                }
+                userId = user.UserId
             });
         }
 
