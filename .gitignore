@@ -7,3 +7,32 @@ obj/
 
 # Ignore DLLs
 *.dll
+
+# Ignore EXE and PDB files
+*.exe
+*.pdb
+
+# Ignore cache and temporary files
+*.cache
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.dbmdl
+*.log
+*.tlog
+
+# Ignore build artifacts
+*.Build.cs
+*.AssemblyInfo.cs
+*.sourcelink.json
+*.ref
+*.refint
+*.build.json
+*.dtbcache.*
+*.futdcache.*
+
+# Ignore nested VS folders
+**/.vs/
+**/bin/
+**/obj/
