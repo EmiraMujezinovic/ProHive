@@ -230,7 +230,8 @@ namespace backend.Controllers
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
                 new Claim(JwtRegisteredClaimNames.UniqueName, user.Username),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim("role", role ?? "")
+                // Standard role claim for ASP.NET Core authorization
+                new Claim(ClaimTypes.Role, role ?? "")
             };
 
             var token = new JwtSecurityToken(
