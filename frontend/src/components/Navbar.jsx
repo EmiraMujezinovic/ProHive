@@ -42,7 +42,12 @@ const Navbar = () => {
       .then(res => res.ok ? res.json() : Promise.reject())
       .then(data => {
         if (data && data.profileImageUrl) {
-          setProfileImage(data.profileImageUrl);
+          // If the path is relative, prepend backend URL
+          const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://localhost:7156';
+          const url = data.profileImageUrl.startsWith('/profile-images')
+            ? backendUrl + data.profileImageUrl
+            : data.profileImageUrl;
+          setProfileImage(url);
         } else {
           setProfileImage('/defaultprofile.jpg');
         }
