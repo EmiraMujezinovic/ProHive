@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import logo from '../assets/images/logo.png';
 
 // Navigation links for each role
@@ -55,16 +56,24 @@ const Navbar = () => {
       .catch(() => setProfileImage('/defaultprofile.jpg'));
   }, [userId]);
 
+  // Helper to get the correct link for each nav item
+  const getNavLink = (link) => {
+    if (role === 'Freelancer' && link === 'My Services') return '/freelancerservices';
+    // Add more mappings as needed
+    return '#';
+  };
+
   return (
-    <header className="bg-primary border-b border-gray-200 shadow-sm position-sticky top-0 z-50">
+    <header className="fixed top-0 left-0 w-full z-50 bg-primary border-b border-gray-200 shadow-sm">
       <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo and brand name on the left */}
-          <div className=" flex items-center md:gap-4 cursor-pointer" >
-            <a className="flex items-center gap-2" href="#">
+          <div className="flex items-center md:gap-4 cursor-pointer">
+            <Link className="flex items-center gap-2" to={role === 'Client' ? '/clientdashboard' : role === 'Freelancer' ? '/freelancerdashboard' : '/'}
+            >
               <img src={logo} alt="ProHive Logo" className="h-13 w-13 object-contain" />
               <div className="text-text text-3xl font-bold tracking-wide select-none" style={{letterSpacing: '0.04em'}}>ProHive</div>
-            </a>
+            </Link>
           </div>
 
           {/* Centered navigation links */}
@@ -72,11 +81,13 @@ const Navbar = () => {
             <ul className="flex items-center gap-12 justify-center">
               {navLinks.map(link => (
                 <li key={link}>
-                  <span
-                    className="text-text border-2 border-primary font-semibold text-lg whitespace-nowrap transition hover:text-background hover:border-b-accent cursor-pointer p-2 rounded-md hover:shadow-2xl hover:shadow-accent"
-                  >
-                    {link}
-                  </span>
+                  <Link to={getNavLink(link)}>
+                    <span
+                      className="text-text border-2 border-primary font-semibold text-lg whitespace-nowrap transition hover:text-background hover:border-b-accent cursor-pointer p-2 rounded-md hover:shadow-2xl hover:shadow-accent"
+                    >
+                      {link}
+                    </span>
+                  </Link>
                 </li>
               ))}
             </ul>

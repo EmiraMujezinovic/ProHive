@@ -4,7 +4,7 @@ const ClientDashboard = () => {
   return (
     <>
       <Navbar />
-      <div className="p-8 text-center">
+      <div className="p-8 text-center pt-20">
         <h1 className="text-3xl font-bold">Client Dashboard</h1>
         <p>Dobrodošli na klijentski dashboard!</p>
       </div>

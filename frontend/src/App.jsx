@@ -7,6 +7,9 @@ import ChooseRole from './components/ChooseRole';
 import RegisterClient from './pages/RegisterClient';
 import RegisterFreelancer from './pages/RegisterFreelancer';
 import ProtectedRoute from './components/ProtectedRoute'; // Import the new component
+import FreelancerServices from './pages/FreelancerServices';
+import AddServiceForm from './pages/AddServiceForm';
+import MyServiceDetails from './pages/MyServiceDetails';
 
 function App() {
   return (
@@ -29,6 +32,9 @@ function App() {
         } />
         <Route path="/registerclient" element={<RegisterClient />} />
         <Route path="/registerfreelancer" element={<RegisterFreelancer />} />
+        <Route path="/freelancerservices" element={<FreelancerServices />} />
+        <Route path="/addserviceform" element={<AddServiceForm />} />
+        <Route path="/myservicedetails/:id" element={<MyServiceDetails />} />
       </Routes>
     </BrowserRouter>
   );
