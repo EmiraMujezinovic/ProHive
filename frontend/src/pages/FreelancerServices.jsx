@@ -32,13 +32,53 @@ const FreelancerServices = () => {
     fetchServices();
   }, []);
 
+  // Search handler for SearchBar
+  const handleSearch = async (query) => {
+    if (!query) {
+      // If search is cleared, reload all services
+      setLoading(true);
+      setError('');
+      try {
+        const res = await fetch('/api/Services/my', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        if (!res.ok) throw new Error('Failed to fetch services');
+        const data = await res.json();
+        setServices(data);
+      } catch (err) {
+        setError('Could not load your services.');
+      } finally {
+        setLoading(false);
+      }
+      return;
+    }
+    setLoading(true);
+    setError('');
+    try {
+      const res = await fetch(`/api/Services/my/search?title=${encodeURIComponent(query)}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      if (!res.ok) throw new Error('Failed to search services');
+      const data = await res.json();
+      setServices(data);
+    } catch (err) {
+      setError('Could not search your services.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <Navbar />
       <div className="min-h-screen bg-background px-6 py-8 pt-30">
         <h1 className="text-3xl font-bold mb-8 text-text text-center">Your Services</h1>
         <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4">
-          <SearchBar />
+          <SearchBar onSearch={handleSearch} />
           <button
             className="bg-accent text-white font-semibold px-6 py-2 rounded-lg shadow hover:bg-secondary hover:text-text transition cursor-pointer"
             onClick={() => navigate('/addserviceform')}
