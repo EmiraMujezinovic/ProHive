@@ -157,6 +157,41 @@ namespace backend.Controllers
             });
         }
 
+        // GET: api/services/my/search
+        // Pretražuje servise prijavljenog freelancera po naslovu
+        [HttpGet("my/search")]
+        [Authorize(Roles = "Freelancer")]
+        public async Task<IActionResult> SearchMyServices([FromQuery] string title)
+        {
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!int.TryParse(userIdStr, out int userId))
+                return Unauthorized();
+
+            var freelancerProfile = await _context.FreelancerProfiles.FirstOrDefaultAsync(f => f.UserId == userId);
+            if (freelancerProfile == null)
+                return BadRequest("Freelancer profile not found.");
+
+            var services = await _context.Services
+                .Where(s => s.FreelancerProfileId == freelancerProfile.FreelancerProfileId &&
+                            EF.Functions.Like(s.Title.ToLower(), "%" + title.ToLower() + "%"))
+                .Include(s => s.ServiceCategory)
+                .Include(s => s.ServiceTags).ThenInclude(st => st.Tag)
+                .Select(s => new {
+                    s.ServiceId,
+                    s.Title,
+                    s.Description,
+                    s.ServiceCategoryId,
+                    Category = s.ServiceCategory.Service,
+                    s.Price,
+                    s.DurationInDays,
+                    s.CreatedAt,
+                    Tags = s.ServiceTags.Select(st => new { st.TagId, st.Tag.Tag1 }).ToList()
+                })
+                .ToListAsync();
+
+            return Ok(services);
+        }
+
         // PUT: api/services/{id}
         // Ažurira samo ona polja koja su eksplicitno poslana (ostala ostaju nepromijenjena)
         [HttpPut("{id}")]
