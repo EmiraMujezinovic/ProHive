@@ -294,6 +294,9 @@ public partial class ProHiveContext : DbContext
         modelBuilder.Entity<Service>(entity =>
         {
             entity.Property(e => e.ServiceId).HasColumnName("serviceID");
+            entity.Property(e => e.CreatedAt)
+                .HasColumnType("datetime")
+                .HasColumnName("createdAt");
             entity.Property(e => e.Description)
                 .HasMaxLength(300)
                 .HasColumnName("description");

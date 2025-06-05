@@ -9,5 +9,6 @@ namespace backend.DTOs
         public int ServiceCategoryId { get; set; }
         public decimal Price { get; set; }
         public int DurationInDays { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }

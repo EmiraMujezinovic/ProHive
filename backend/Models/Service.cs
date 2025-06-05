@@ -19,6 +19,8 @@ public partial class Service
 
     public int DurationInDays { get; set; }
 
+    public DateTime CreatedAt { get; set; }
+
     public virtual ICollection<Favorite> Favorites { get; set; } = new List<Favorite>();
 
     public virtual FreelancerProfile FreelancerProfile { get; set; } = null!;

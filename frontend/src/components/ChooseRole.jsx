@@ -10,13 +10,13 @@ const ChooseRole = () => {
         <div className="flex flex-col gap-6">
           <button
             onClick={() => navigate('/registerclient')}
-            className="w-full py-4 rounded-lg bg-primary text-text font-semibold text-lg shadow hover:bg-accent transition"
+            className="w-full py-4 rounded-lg bg-primary text-text font-semibold text-lg shadow hover:bg-accent transition cursor-pointer"
           >
             Client
           </button>
           <button
             onClick={() => navigate('/registerfreelancer')}
-            className="w-full py-4 rounded-lg bg-primary text-text font-semibold text-lg shadow hover:bg-accent transition"
+            className="w-full py-4 rounded-lg bg-primary text-text font-semibold text-lg shadow hover:bg-accent transition cursor-pointer"
           >
             Freelancer
           </button>

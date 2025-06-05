@@ -229,7 +229,7 @@ const RegisterFreelancer = () => {
         <button
           type="submit"
           disabled={isFormInvalid() || loading}
-          className="w-full bg-primary text-text py-2 rounded font-semibold hover:bg-secondary transition mt-2 disabled:opacity-60"
+          className="w-full bg-primary text-text py-2 rounded font-semibold hover:bg-secondary transition mt-2 disabled:opacity-60 cursor-pointer hover:scale-101"
         >
           {loading ? 'Registering...' : 'Register'}
         </button>
