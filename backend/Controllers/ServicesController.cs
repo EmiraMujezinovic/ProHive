@@ -1,4 +1,4 @@
-using backend.Models;
+ï»¿using backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -28,7 +28,7 @@ namespace backend.Controllers
             if (!int.TryParse(userIdStr, out int userId))
                 return Unauthorized();
 
-            // Prona?i freelancer profil
+            // Pronadji freelancer profil
             var freelancerProfile = await _context.FreelancerProfiles.FirstOrDefaultAsync(f => f.UserId == userId);
             if (freelancerProfile == null)
                 return BadRequest("Freelancer profile not found.");
@@ -66,7 +66,7 @@ namespace backend.Controllers
         }
 
         // GET: api/services/categories
-        // Vra?a sve service kategorije
+        // Vraca sve service kategorije
         [HttpGet("categories")]
         [AllowAnonymous]
         public async Task<IActionResult> GetServiceCategories()
@@ -78,7 +78,7 @@ namespace backend.Controllers
         }
 
         // GET: api/services/tags
-        // Vra?a sve tagove
+        // Vraca sve tagove
         [HttpGet("tags")]
         [AllowAnonymous]
         public async Task<IActionResult> GetTags()
@@ -88,9 +88,42 @@ namespace backend.Controllers
                 .ToListAsync();
             return Ok(tags);
         }
+        // GET: api/services/all
+        // Vraca sve servise zajedno s informacijama o freelanceru koji ih je kreirao
+        [HttpGet("all")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAllServicesWithFreelancer()
+        {
+            var services = await _context.Services
+                .Include(s => s.FreelancerProfile)
+                    .ThenInclude(fp => fp.User)
+                .Include(s => s.ServiceCategory)
+                .Include(s => s.ServiceTags).ThenInclude(st => st.Tag)
+                .Select(s => new {
+                    s.ServiceId,
+                    s.Title,
+                    s.Description,
+                    s.ServiceCategoryId,
+                    Category = s.ServiceCategory.Service,
+                    s.Price,
+                    s.DurationInDays,
+                    s.CreatedAt,
+                    Freelancer = new
+                    {
+                        s.FreelancerProfile.FreelancerProfileId,
+                        s.FreelancerProfile.UserId,
+                        s.FreelancerProfile.User.Username,
+                        s.FreelancerProfile.User.FullName,
+                        s.FreelancerProfile.User.ProfileImageUrl
+                    },
+                    Tags = s.ServiceTags.Select(st => new { st.TagId, st.Tag.Tag1 }).ToList()
+                })
+                .ToListAsync();
 
+            return Ok(services);
+        }
         // GET: api/services/my
-        // Vra?a sve servise prijavljenog freelancera
+        // Vraca sve servise prijavljenog freelancera
         [HttpGet("my")]
         [Authorize(Roles = "Freelancer")]
         public async Task<IActionResult> GetMyServices()
@@ -124,7 +157,7 @@ namespace backend.Controllers
         }
 
         // GET: api/services/{id}
-        // Vra?a sve podatke o servisu po id-u (zašti?eno, ali bez role)
+        // Vraca sve podatke o servisu po id-u (zasticeno, ali bez role)
         [HttpGet("{id}")]
         [Authorize]
         public async Task<IActionResult> GetServiceById(int id)
@@ -147,7 +180,8 @@ namespace backend.Controllers
                 service.Price,
                 service.DurationInDays,
                 service.CreatedAt,
-                Freelancer = new {
+                Freelancer = new
+                {
                     service.FreelancerProfile.FreelancerProfileId,
                     service.FreelancerProfile.UserId,
                     service.FreelancerProfile.User.Username,
@@ -158,7 +192,7 @@ namespace backend.Controllers
         }
 
         // GET: api/services/my/search
-        // Pretražuje servise prijavljenog freelancera po naslovu
+        // Pretrazuje servise prijavljenog freelancera po naslovu
         [HttpGet("my/search")]
         [Authorize(Roles = "Freelancer")]
         public async Task<IActionResult> SearchMyServices([FromQuery] string title)
@@ -191,9 +225,74 @@ namespace backend.Controllers
 
             return Ok(services);
         }
-
+        // GET: api/services/search/title
+        // Pretrazuje sve servise po naslovu
+        [HttpGet("search/title")]
+        [AllowAnonymous]
+        public async Task<IActionResult> SearchAllServicesByTitle([FromQuery] string title)
+        {
+            var services = await _context.Services
+                .Include(s => s.FreelancerProfile).ThenInclude(fp => fp.User)
+                .Include(s => s.ServiceCategory)
+                .Include(s => s.ServiceTags).ThenInclude(st => st.Tag)
+                .Where(s => EF.Functions.Like(s.Title.ToLower(), "%" + title.ToLower() + "%"))
+                .Select(s => new {
+                    s.ServiceId,
+                    s.Title,
+                    s.Description,
+                    s.ServiceCategoryId,
+                    Category = s.ServiceCategory.Service,
+                    s.Price,
+                    s.DurationInDays,
+                    s.CreatedAt,
+                    Freelancer = new
+                    {
+                        s.FreelancerProfile.FreelancerProfileId,
+                        s.FreelancerProfile.UserId,
+                        s.FreelancerProfile.User.Username,
+                        s.FreelancerProfile.User.FullName,
+                        s.FreelancerProfile.User.ProfileImageUrl
+                    },
+                    Tags = s.ServiceTags.Select(st => new { st.TagId, st.Tag.Tag1 }).ToList()
+                })
+                .ToListAsync();
+            return Ok(services);
+        }
+        // GET: api/services/search/category
+        // Pretrazuje sve servise po kategoriji
+        [HttpGet("search/category")]
+        [AllowAnonymous]
+        public async Task<IActionResult> SearchAllServicesByCategory([FromQuery] int categoryId)
+        {
+            var services = await _context.Services
+                .Include(s => s.FreelancerProfile).ThenInclude(fp => fp.User)
+                .Include(s => s.ServiceCategory)
+                .Include(s => s.ServiceTags).ThenInclude(st => st.Tag)
+                .Where(s => s.ServiceCategoryId == categoryId)
+                .Select(s => new {
+                    s.ServiceId,
+                    s.Title,
+                    s.Description,
+                    s.ServiceCategoryId,
+                    Category = s.ServiceCategory.Service,
+                    s.Price,
+                    s.DurationInDays,
+                    s.CreatedAt,
+                    Freelancer = new
+                    {
+                        s.FreelancerProfile.FreelancerProfileId,
+                        s.FreelancerProfile.UserId,
+                        s.FreelancerProfile.User.Username,
+                        s.FreelancerProfile.User.FullName,
+                        s.FreelancerProfile.User.ProfileImageUrl
+                    },
+                    Tags = s.ServiceTags.Select(st => new { st.TagId, st.Tag.Tag1 }).ToList()
+                })
+                .ToListAsync();
+            return Ok(services);
+        }
         // PUT: api/services/{id}
-        // Ažurira samo ona polja koja su eksplicitno poslana (ostala ostaju nepromijenjena)
+        // Azurira samo ona polja koja su eksplicitno poslana (ostala ostaju nepromijenjena)
         [HttpPut("{id}")]
         [Authorize(Roles = "Freelancer")]
         public async Task<IActionResult> UpdateServicePartial(int id, [FromBody] UpdateServiceDto dto)
@@ -211,7 +310,7 @@ namespace backend.Controllers
             if (service == null)
                 return NotFound("Service not found or not owned by you.");
 
-            // Ažuriraj samo ona polja koja su eksplicitno poslana (ne null)
+            // Azuriraj samo ona polja koja su eksplicitno poslana (ne null)
             if (dto.Title != null)
                 service.Title = dto.Title;
             if (dto.Description != null)
@@ -247,7 +346,7 @@ namespace backend.Controllers
             return Ok(new { message = "Service updated successfully." });
         }
         // DELETE: api/services/{id}
-        // Briše servis prijavljenog freelancera
+        // Brise servis prijavljenog freelancera
         [HttpDelete("{id}")]
         [Authorize(Roles = "Freelancer")]
         public async Task<IActionResult> DeleteService(int id)
@@ -273,6 +372,95 @@ namespace backend.Controllers
             return Ok(new { message = "Service deleted successfully." });
         }
 
+        // POST: api/services/favorite/{serviceId}
+        // Dodaje servis u favorite za prijavljenog korisnika (klijenta)
+        [HttpPost("favorite/{serviceId}")]
+        [Authorize(Roles = "Client")]
+        public async Task<IActionResult> AddServiceToFavorites(int serviceId)
+        {
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!int.TryParse(userIdStr, out int userId))
+                return Unauthorized();
+
+            // Provjeri postoji li vec u favoritima
+            var alreadyFavorite = await _context.Favorites
+                .AnyAsync(f => f.UserId == userId && f.ServiceId == serviceId);
+            if (alreadyFavorite)
+                return BadRequest("Service is already in favorites.");
+
+            // Provjeri postoji li servis
+            var serviceExists = await _context.Services.AnyAsync(s => s.ServiceId == serviceId);
+            if (!serviceExists)
+                return NotFound("Service not found.");
+
+            var favorite = new Favorite
+            {
+                UserId = userId,
+                ServiceId = serviceId
+            };
+            _context.Favorites.Add(favorite);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Service added to favorites." });
+        }
+
+        // GET: api/services/favorites/{userId}
+        // Vraca sve servise koje je korisnik dodao u favorite
+        [HttpGet("favorites/{userId}")]
+        [Authorize]
+        public async Task<IActionResult> GetFavoriteServicesByUser(int userId)
+        {
+            var favorites = await _context.Favorites
+                .Where(f => f.UserId == userId)
+                .Include(f => f.Service)
+                    .ThenInclude(s => s.FreelancerProfile)
+                        .ThenInclude(fp => fp.User)
+                .Include(f => f.Service.ServiceCategory)
+                .Include(f => f.Service.ServiceTags).ThenInclude(st => st.Tag)
+                .Select(f => new {
+                    f.Service.ServiceId,
+                    f.Service.Title,
+                    f.Service.Description,
+                    f.Service.ServiceCategoryId,
+                    Category = f.Service.ServiceCategory.Service,
+                    f.Service.Price,
+                    f.Service.DurationInDays,
+                    f.Service.CreatedAt,
+                    Freelancer = new
+                    {
+                        f.Service.FreelancerProfile.FreelancerProfileId,
+                        f.Service.FreelancerProfile.UserId,
+                        f.Service.FreelancerProfile.User.Username,
+                        f.Service.FreelancerProfile.User.FullName,
+                        f.Service.FreelancerProfile.User.ProfileImageUrl
+                    },
+                    Tags = f.Service.ServiceTags.Select(st => new { st.TagId, st.Tag.Tag1 }).ToList()
+                })
+                .ToListAsync();
+
+            return Ok(favorites);
+        }
+        // DELETE: api/services/favorite/{serviceId}
+        // Uklanja servis iz favorita za prijavljenog korisnika (usera)
+        [HttpDelete("favorite/{serviceId}")]
+        [Authorize]
+        public async Task<IActionResult> RemoveServiceFromFavorites(int serviceId)
+        {
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!int.TryParse(userIdStr, out int userId))
+                return Unauthorized();
+
+            var favorite = await _context.Favorites
+                .FirstOrDefaultAsync(f => f.UserId == userId && f.ServiceId == serviceId);
+
+            if (favorite == null)
+                return NotFound("Favorite not found for this user and service.");
+
+            _context.Favorites.Remove(favorite);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Service removed from favorites." });
+        }
     }
 
 
@@ -287,7 +475,7 @@ namespace backend.Controllers
         public List<int>? TagIds { get; set; }
     }
 
-    // DTO za ažuriranje servisa
+    // DTO za azuriranje servisa
     public class UpdateServiceDto
     {
         public string? Title { get; set; }
