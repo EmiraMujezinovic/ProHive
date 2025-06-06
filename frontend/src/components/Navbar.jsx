@@ -59,6 +59,7 @@ const Navbar = () => {
   // Helper to get the correct link for each nav item
   const getNavLink = (link) => {
     if (role === 'Freelancer' && link === 'My Services') return '/freelancerservices';
+    if (role === 'Client' && link === 'Services') return '/clientservices';
     // Add more mappings as needed
     return '#';
   };

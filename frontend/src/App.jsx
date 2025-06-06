@@ -10,6 +10,7 @@ import ProtectedRoute from './components/ProtectedRoute'; // Import the new comp
 import FreelancerServices from './pages/FreelancerServices';
 import AddServiceForm from './pages/AddServiceForm';
 import MyServiceDetails from './pages/MyServiceDetails';
+import ClientServices from './pages/ClientServices';
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
         <Route path="/freelancerservices" element={<FreelancerServices />} />
         <Route path="/addserviceform" element={<AddServiceForm />} />
         <Route path="/myservicedetails/:id" element={<MyServiceDetails />} />
+        <Route path="/clientservices" element={<ClientServices />} />
       </Routes>
     </BrowserRouter>
   );

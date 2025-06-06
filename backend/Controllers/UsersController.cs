@@ -73,5 +73,25 @@ namespace backend.Controllers
 
             return Ok(new { profileImageUrl = user.ProfileImageUrl });
         }
+        // GET: api/Users/freelancer-profile-image/{freelancerProfileId}
+        // Vraca profilnu sliku freelancera na osnovu freelancerProfileId (samo za prijavljenog klijenta)
+        [HttpGet("freelancer-profile-image/{freelancerProfileId}")]
+        [Authorize(Roles = "Client")]
+        public async Task<IActionResult> GetFreelancerProfileImage(int freelancerProfileId)
+        {
+            var freelancerProfile = await _context.FreelancerProfiles
+                .FirstOrDefaultAsync(fp => fp.FreelancerProfileId == freelancerProfileId);
+
+            if (freelancerProfile == null)
+                return NotFound("Freelancer profile not found.");
+
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.UserId == freelancerProfile.UserId);
+
+            if (user == null)
+                return NotFound("User not found.");
+
+            return Ok(new { profileImageUrl = user.ProfileImageUrl });
+        }
     }
 }
