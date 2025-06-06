@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import ServicesSearchBar from '../components/ServicesSearchBar';
-import ClientServiceCard from '../components/ClientServiceCard';
+import ClientServicesGridWithFavorites from '../components/ClientServicesGridWithFavorites';
 
 const ClientServices = () => {
   const [services, setServices] = useState([]);
@@ -41,20 +41,8 @@ const ClientServices = () => {
         {!loading && !error && services.length === 0 && (
           <div className="text-gray-500 mt-8">No services found.</div>
         )}
-        <div className="w-full max-w-6xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-          {services.map(service => (
-            <ClientServiceCard
-              key={service.ServiceId || service.serviceId}
-              title={service.Title || service.title}
-              price={service.Price || service.price}
-              category={service.Category || service.category}
-              tags={service.Tags ? (service.Tags.map(t => t.Tag1 || t.tag1)) : (service.tags ? service.tags.map(t => t.Tag1 || t.tag1) : [])}
-              profileImageUrl={service.Freelancer && service.Freelancer.ProfileImageUrl ? service.Freelancer.ProfileImageUrl : (service.freelancer && service.freelancer.profileImageUrl)}
-              fullName={service.Freelancer && service.Freelancer.FullName ? service.Freelancer.FullName : (service.freelancer && service.freelancer.fullName)}
-              freelancerUserId={service.Freelancer && service.Freelancer.UserId ? service.Freelancer.UserId : (service.freelancer && service.freelancer.userId)}
-              // onClick={() => ...} // Add navigation if needed
-            />
-          ))}
+        <div className="w-full max-w-6xl">
+          <ClientServicesGridWithFavorites services={services} />
         </div>
       </div>
     </>

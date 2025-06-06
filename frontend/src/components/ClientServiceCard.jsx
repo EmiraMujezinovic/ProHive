@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import FavoriteButton from './FavoriteButton';
 
 /**
  * ClientServiceCard component for displaying a service to clients.
@@ -12,7 +13,7 @@ import React, { useEffect, useState } from 'react';
  * - freelancerProfileId: number | string (for fetching profile image)
  * - onClick: function (optional)
  */
-const ClientServiceCard = ({ title, price, category, tags, profileImageUrl, fullName, freelancerProfileId, onClick }) => {
+const ClientServiceCard = ({ title, price, category, tags, profileImageUrl, fullName, freelancerProfileId, onClick, serviceId, isFavorited, onFavoriteToggle, favoriteButtonDisabled }) => {
   const [imageUrl, setImageUrl] = useState(profileImageUrl || '/defaultprofile.jpg');
 
   useEffect(() => {
@@ -64,7 +65,12 @@ const ClientServiceCard = ({ title, price, category, tags, profileImageUrl, full
     >
       <div className="flex items-center justify-between mb-2">
         <h2 className="text-xl font-bold text-primary truncate" title={title}>{title}</h2>
-        <span className="text-lg font-semibold text-accent">${price}</span>
+        <FavoriteButton
+          serviceId={serviceId}
+          isFavorited={isFavorited}
+          onToggle={onFavoriteToggle}
+          disabled={favoriteButtonDisabled}
+        />
       </div>
       {/* Freelancer info */}
       <div className="flex items-center gap-3 mb-1">
@@ -79,16 +85,19 @@ const ClientServiceCard = ({ title, price, category, tags, profileImageUrl, full
       <div className="text-sm text-text mb-1">
         <span className="font-medium text-accent">Category:</span> {category}
       </div>
-      <div className="flex flex-wrap gap-2 mt-1">
-        {tags && tags.length > 0 ? (
-          tags.map((tag, idx) => (
-            <span key={idx} className="bg-accent/10 text-accent px-2 py-1 rounded-full text-xs font-medium">
-              {tag}
-            </span>
-          ))
-        ) : (
-          <span className="text-gray-400 text-xs">No tags</span>
-        )}
+      <div className="flex flex-wrap gap-2 mt-1 items-center justify-between">
+        <div className="flex flex-wrap gap-2">
+          {tags && tags.length > 0 ? (
+            tags.map((tag, idx) => (
+              <span key={idx} className="bg-accent/10 text-accent px-2 py-1 rounded-full text-xs font-medium">
+                {tag}
+              </span>
+            ))
+          ) : (
+            <span className="text-gray-400 text-xs">No tags</span>
+          )}
+        </div>
+        <span className="text-lg font-semibold text-accent ml-auto">${price}</span>
       </div>
     </div>
   );
