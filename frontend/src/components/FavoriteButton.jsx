@@ -37,7 +37,7 @@ const FavoriteButton = ({ serviceId, isFavorited, onToggle, disabled }) => {
 
   return (
     <button
-      className={`p-2 rounded-full border border-secondary bg-white shadow hover:bg-accent/10 transition flex items-center justify-center ${loading ? 'opacity-60 cursor-not-allowed' : ''}`}
+      className={`p-1 rounded-full  bg-white shadow hover:bg-secondary/50 transition flex items-center cursor-pointer justify-center hover:scale-110 ${loading ? 'opacity-60 cursor-not-allowed' : ''}`}
       onClick={handleClick}
       disabled={loading || disabled}
       title={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
@@ -46,7 +46,7 @@ const FavoriteButton = ({ serviceId, isFavorited, onToggle, disabled }) => {
       <img
         src={isFavorited ? favoritedIcon : favoriteIcon}
         alt={isFavorited ? 'Favorited' : 'Favorite'}
-        className="w-7 h-7"
+        className="w-6 h-6"
       />
     </button>
   );

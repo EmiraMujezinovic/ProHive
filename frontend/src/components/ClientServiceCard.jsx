@@ -82,8 +82,11 @@ const ClientServiceCard = ({ title, price, category, tags, profileImageUrl, full
         />
         <span className="text-sm text-text font-medium truncate">{fullName}</span>
       </div>
-      <div className="text-sm text-text mb-1">
-        <span className="font-medium text-accent">Category:</span> {category}
+      <div className="flex items-center justify-between mb-1">
+        <div className="text-sm text-text">
+          <span className="font-medium text-accent">Category:</span> {category}
+        </div>
+        <span className="text-lg font-semibold text-accent ml-4">${price}</span>
       </div>
       <div className="flex flex-wrap gap-2 mt-1 items-center justify-between">
         <div className="flex flex-wrap gap-2">
@@ -97,7 +100,6 @@ const ClientServiceCard = ({ title, price, category, tags, profileImageUrl, full
             <span className="text-gray-400 text-xs">No tags</span>
           )}
         </div>
-        <span className="text-lg font-semibold text-accent ml-auto">${price}</span>
       </div>
     </div>
   );

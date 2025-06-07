@@ -9,9 +9,29 @@ const ClientServices = () => {
   const [error, setError] = useState('');
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [favoriteIds, setFavoriteIds] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [activeCategoryId, setActiveCategoryId] = useState(null);
+  const [searchValue, setSearchValue] = useState('');
 
-  // Fetch all services
+  // Fetch all categories on mount
   useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch('/api/Services/categories');
+        if (!res.ok) throw new Error('Failed to fetch categories');
+        const data = await res.json();
+        console.log('Fetched categories:', data); // Debug log
+        setCategories(data);
+      } catch {
+        setCategories([]);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  // Fetch all services (default)
+  useEffect(() => {
+    if (searchValue || activeCategoryId) return; // Don't fetch all if searching or filtering
     const fetchServices = async () => {
       setLoading(true);
       setError('');
@@ -31,7 +51,7 @@ const ClientServices = () => {
       }
     };
     fetchServices();
-  }, []);
+  }, [searchValue, activeCategoryId]);
 
   // Fetch favorite IDs for filtering
   useEffect(() => {
@@ -57,6 +77,82 @@ const ClientServices = () => {
     fetchFavorites();
   }, []);
 
+  // Search by title
+  const handleSearch = async (val) => {
+    setSearchValue(val);
+    setActiveCategoryId(null);
+    if (!val) {
+      // If search is cleared, fetch all
+      setLoading(true);
+      setError('');
+      try {
+        const res = await fetch('/api/Services/all', {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        });
+        if (!res.ok) throw new Error('Failed to fetch services');
+        const data = await res.json();
+        setServices(data);
+      } catch (err) {
+        setError('Could not load services.');
+      } finally {
+        setLoading(false);
+      }
+      return;
+    }
+    setLoading(true);
+    setError('');
+    try {
+      const res = await fetch(`/api/Services/search/title?title=${encodeURIComponent(val)}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      });
+      if (!res.ok) throw new Error('Failed to search services');
+      const data = await res.json();
+      setServices(data);
+    } catch (err) {
+      setError('Could not search services.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Filter by category
+  const handleCategoryFilter = async (categoryId) => {
+    setActiveCategoryId(categoryId);
+    setSearchValue('');
+    if (!categoryId) {
+      // If filter is cleared, fetch all
+      setLoading(true);
+      setError('');
+      try {
+        const res = await fetch('/api/Services/all', {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        });
+        if (!res.ok) throw new Error('Failed to fetch services');
+        const data = await res.json();
+        setServices(data);
+      } catch (err) {
+        setError('Could not load services.');
+      } finally {
+        setLoading(false);
+      }
+      return;
+    }
+    setLoading(true);
+    setError('');
+    try {
+      const res = await fetch(`/api/Services/search/category?categoryId=${categoryId}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      });
+      if (!res.ok) throw new Error('Failed to filter services');
+      const data = await res.json();
+      setServices(data);
+    } catch (err) {
+      setError('Could not filter services.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Filtered services for grid
   const filteredServices = showFavoritesOnly
     ? services.filter(s => favoriteIds.includes(s.ServiceId || s.serviceId))
@@ -70,6 +166,10 @@ const ClientServices = () => {
         <ServicesSearchBar
           onViewFavoritesToggle={setShowFavoritesOnly}
           showFavoritesOnly={showFavoritesOnly}
+          onSearch={handleSearch}
+          onCategoryFilter={handleCategoryFilter}
+          categories={categories}
+          activeCategoryId={activeCategoryId}
         />
         {loading && <div className="text-gray-500 mt-8">Loading...</div>}
         {error && <div className="text-red-500 mt-8 mb-4">{error}</div>}
