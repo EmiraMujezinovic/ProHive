@@ -112,7 +112,7 @@ namespace backend.Controllers
         }
 
         // POST: api/Orders
-        // Allows the currently logged-in client to create a new order. OrderStatusId is set to 1, DueDate is set to today + 5 days.
+        // Allows the currently logged-in client to create a new order. Only creates if there is no active order (status 1 or 2) for this client and service.
         [HttpPost]
         [Authorize(Roles = "Client")]
         public async Task<IActionResult> CreateOrder([FromBody] int serviceId)
@@ -132,7 +132,14 @@ namespace backend.Controllers
             if (service == null)
                 return NotFound("Service not found.");
 
-            // Create new order
+            // Check for existing order for this client and service with status 1 or 2
+            var existingOrder = await _context.Orders.FirstOrDefaultAsync(o => o.ServiceId == serviceId && o.ClientProfileId == clientProfile.ClientProfileId && (o.OrderStatusId == 1 || o.OrderStatusId == 2));
+            if (existingOrder != null)
+            {
+                return BadRequest(new { message = "Order already placed for this service." });
+            }
+
+            // Create new order if not exists or if previous order is completed/cancelled/expired
             var order = new Order
             {
                 ServiceId = serviceId,
@@ -236,6 +243,33 @@ namespace backend.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(new { message = "Order marked as complete and payment created successfully." });
+        }
+
+        // DELETE: api/Orders/{orderId}
+        // Allows the currently logged-in client to delete an order they created by orderId
+        [HttpDelete("{orderId}")]
+        [Authorize(Roles = "Client")]
+        public async Task<IActionResult> DeleteOrder(int orderId)
+        {
+            // Get userId from JWT token
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!int.TryParse(userIdStr, out int userId))
+                return Unauthorized();
+
+            // Find the client profile for this user
+            var clientProfile = await _context.ClientProfiles.FirstOrDefaultAsync(cp => cp.UserId == userId);
+            if (clientProfile == null)
+                return BadRequest("Client profile not found.");
+
+            // Find the order and check if it belongs to this client
+            var order = await _context.Orders.FirstOrDefaultAsync(o => o.OrderId == orderId && o.ClientProfileId == clientProfile.ClientProfileId);
+            if (order == null)
+                return NotFound(new { message = "Order not found or you do not have permission to delete it." });
+
+            _context.Orders.Remove(order);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Order deleted successfully." });
         }
     }
 }
