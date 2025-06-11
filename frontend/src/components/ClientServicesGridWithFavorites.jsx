@@ -7,7 +7,7 @@ import ClientServiceCard from './ClientServiceCard';
  * Props:
  * - services: array of service objects
  */
-const ClientServicesGridWithFavorites = ({ services }) => {
+const ClientServicesGridWithFavorites = ({ services, onServiceClick }) => {
   const [favoriteIds, setFavoriteIds] = useState([]);
   const [loadingFavorites, setLoadingFavorites] = useState(true);
   const [favoriteLoading, setFavoriteLoading] = useState({}); // { [serviceId]: bool }
@@ -80,6 +80,7 @@ const ClientServicesGridWithFavorites = ({ services }) => {
             isFavorited={favoriteIds.includes(id)}
             onFavoriteToggle={isNowFav => handleFavoriteToggle(id, isNowFav)}
             favoriteButtonDisabled={loadingFavorites || favoriteLoading[id]}
+            onClick={() => onServiceClick && onServiceClick(id)}
           />
         );
       })}

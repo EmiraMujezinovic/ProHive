@@ -11,6 +11,7 @@ import FreelancerServices from './pages/FreelancerServices';
 import AddServiceForm from './pages/AddServiceForm';
 import MyServiceDetails from './pages/MyServiceDetails';
 import ClientServices from './pages/ClientServices';
+import ClientServiceDetails from './pages/ClientServiceDetails';
 
 function App() {
   return (
@@ -36,7 +37,16 @@ function App() {
         <Route path="/freelancerservices" element={<FreelancerServices />} />
         <Route path="/addserviceform" element={<AddServiceForm />} />
         <Route path="/myservicedetails/:id" element={<MyServiceDetails />} />
-        <Route path="/clientservices" element={<ClientServices />} />
+        <Route path="/clientservices" element={
+          <ProtectedRoute requiredRole="Client">
+            <ClientServices />
+          </ProtectedRoute>
+        } />
+        <Route path="/clientservicedetails/:id" element={
+          <ProtectedRoute requiredRole="Client">
+            <ClientServiceDetails />
+          </ProtectedRoute>
+        } />
       </Routes>
     </BrowserRouter>
   );

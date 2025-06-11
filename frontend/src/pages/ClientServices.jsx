@@ -177,7 +177,10 @@ const ClientServices = () => {
           <div className="text-gray-500 mt-8">No services found.</div>
         )}
         <div className="w-full max-w-6xl">
-          <ClientServicesGridWithFavorites services={filteredServices} />
+          <ClientServicesGridWithFavorites
+            services={filteredServices}
+            onServiceClick={serviceId => window.location.href = `/clientservicedetails/${serviceId}`}
+          />
         </div>
       </div>
     </>

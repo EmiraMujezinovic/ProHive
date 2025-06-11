@@ -73,6 +73,7 @@ namespace backend.Controllers
 
             return Ok(new { profileImageUrl = user.ProfileImageUrl });
         }
+
         // GET: api/Users/freelancer-profile-image/{freelancerProfileId}
         // Vraca profilnu sliku freelancera na osnovu freelancerProfileId (samo za prijavljenog klijenta)
         [HttpGet("freelancer-profile-image/{freelancerProfileId}")]
@@ -92,6 +93,114 @@ namespace backend.Controllers
                 return NotFound("User not found.");
 
             return Ok(new { profileImageUrl = user.ProfileImageUrl });
+        }
+
+        // GET: api/Users/user-freelancer-info
+        // Vraca informacije iz Users i FreelancerProfile tablice na osnovu userId ili freelancerProfileId
+        [HttpGet("user-freelancer-info")]
+        [Authorize]
+        public async Task<IActionResult> GetUserAndFreelancerInfo([FromQuery] int? userId, [FromQuery] int? freelancerProfileId)
+        {
+            if (userId == null && freelancerProfileId == null)
+                return BadRequest("You must provide either userId or freelancerProfileId.");
+
+            // Prvo pokusaj preko freelancerProfileId
+            if (freelancerProfileId != null)
+            {
+                var freelancerProfile = await _context.FreelancerProfiles
+                    .Include(fp => fp.User)
+                    .FirstOrDefaultAsync(fp => fp.FreelancerProfileId == freelancerProfileId.Value);
+
+                if (freelancerProfile == null)
+                    return NotFound("Freelancer profile not found.");
+
+                return Ok(new
+                {
+                    freelancerProfile.FreelancerProfileId,
+                    freelancerProfile.UserId,
+                    freelancerProfile.Bio,
+                    freelancerProfile.ExperianceLevel,
+                    freelancerProfile.Location,
+                    User = new
+                    {
+                        freelancerProfile.User.UserId,
+                        freelancerProfile.User.Username,
+                        freelancerProfile.User.Email,
+                        freelancerProfile.User.FullName,
+                        freelancerProfile.User.PhoneNumber,
+                        freelancerProfile.User.ProfileImageUrl
+                    }
+                });
+            }
+            else // Ako je proslijedjen userId
+            {
+                var user = await _context.Users
+                    .Include(u => u.FreelancerProfiles)
+                    .FirstOrDefaultAsync(u => u.UserId == userId.Value);
+
+                if (user == null)
+                    return NotFound("User not found.");
+
+                // Uzmi prvi freelancer profil ako postoji
+                var freelancerProfile = user.FreelancerProfiles.FirstOrDefault();
+
+                return Ok(new
+                {
+                    User = new
+                    {
+                        user.UserId,
+                        user.Username,
+                        user.Email,
+                        user.FullName,
+                        user.PhoneNumber,
+                        user.ProfileImageUrl
+                    },
+                    FreelancerProfile = freelancerProfile != null ? new
+                    {
+                        freelancerProfile.FreelancerProfileId,
+                        freelancerProfile.UserId,
+                        freelancerProfile.Bio,
+                        freelancerProfile.ExperianceLevel,
+                        freelancerProfile.Location
+                    } : null
+                });
+            }
+        }
+
+        // GET: api/Users/client-profile/{clientProfileId}
+        // Returns all client and user data for the given clientProfileId (for the logged-in user)
+        [HttpGet("client-profile/{clientProfileId}")]
+        [Authorize]
+        public async Task<IActionResult> GetClientProfileWithUser(int clientProfileId)
+        {
+            var clientProfile = await _context.ClientProfiles
+                .Include(cp => cp.User)
+                .FirstOrDefaultAsync(cp => cp.ClientProfileId == clientProfileId);
+
+            if (clientProfile == null)
+                return NotFound("Client profile not found.");
+
+            return Ok(new
+            {
+                ClientProfile = new
+                {
+                    clientProfile.ClientProfileId,
+                    clientProfile.UserId,
+                    clientProfile.CompanyName,
+                    clientProfile.JobTitle,
+                    clientProfile.Description,
+                    clientProfile.Location
+                },
+                User = new
+                {
+                    clientProfile.User.UserId,
+                    clientProfile.User.Username,
+                    clientProfile.User.Email,
+                    clientProfile.User.FullName,
+                    clientProfile.User.PhoneNumber,
+                    clientProfile.User.ProfileImageUrl
+                }
+            });
         }
     }
 }
