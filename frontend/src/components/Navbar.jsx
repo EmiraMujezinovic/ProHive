@@ -28,7 +28,15 @@ const linksByRole = {
 const Navbar = () => {
   const role = localStorage.getItem('role');
   const userId = localStorage.getItem('userId');
-  const navLinks = linksByRole[role] || [];
+  const navLinks = [
+    { name: 'Recommended', to: '/recommended', show: true },
+    { name: 'Services', to: '/clientservices', show: role === 'Client' },
+    { name: 'My Orders', to: '/clientorders', show: role === 'Client' },
+    { name: 'My Projects', to: '/myprojects', show: role === 'Client' },
+    { name: 'Applications', to: '/applications', show: true },
+    { name: 'Projects', to: '/projects', show: role === 'Freelancer' },
+    { name: 'My Services', to: '/freelancerservices', show: role === 'Freelancer' },
+  ].filter(link => link.show);
   const [profileImage, setProfileImage] = useState('/defaultprofile.jpg');
 
   useEffect(() => {
@@ -56,14 +64,6 @@ const Navbar = () => {
       .catch(() => setProfileImage('/defaultprofile.jpg'));
   }, [userId]);
 
-  // Helper to get the correct link for each nav item
-  const getNavLink = (link) => {
-    if (role === 'Freelancer' && link === 'My Services') return '/freelancerservices';
-    if (role === 'Client' && link === 'Services') return '/clientservices';
-    // Add more mappings as needed
-    return '#';
-  };
-
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-primary border-b border-gray-200 shadow-sm">
       <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
@@ -81,12 +81,12 @@ const Navbar = () => {
           <nav aria-label="Global" className="hidden md:block flex-1">
             <ul className="flex items-center gap-12 justify-center">
               {navLinks.map(link => (
-                <li key={link}>
-                  <Link to={getNavLink(link)}>
+                <li key={link.name}>
+                  <Link to={link.to}>
                     <span
                       className="text-text border-2 border-primary font-semibold text-lg whitespace-nowrap transition hover:text-background hover:border-b-accent cursor-pointer p-2 rounded-md hover:shadow-2xl hover:shadow-accent"
                     >
-                      {link}
+                      {link.name}
                     </span>
                   </Link>
                 </li>

@@ -12,6 +12,7 @@ import AddServiceForm from './pages/AddServiceForm';
 import MyServiceDetails from './pages/MyServiceDetails';
 import ClientServices from './pages/ClientServices';
 import ClientServiceDetails from './pages/ClientServiceDetails';
+import ClientOrders from './pages/ClientOrders';
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
             <ClientServiceDetails />
           </ProtectedRoute>
         } />
+        <Route path="/clientorders" element={<ClientOrders />} />
       </Routes>
     </BrowserRouter>
   );
