@@ -271,16 +271,21 @@ public partial class ProHiveContext : DbContext
             entity.Property(e => e.Rating).HasColumnName("rating");
             entity.Property(e => e.RevieweeId).HasColumnName("revieweeID");
             entity.Property(e => e.ReviewerId).HasColumnName("reviewerID");
+            entity.Property(e => e.ServiceId).HasColumnName("serviceID");
 
             entity.HasOne(d => d.Reviewee).WithMany(p => p.ReviewReviewees)
                 .HasForeignKey(d => d.RevieweeId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Reviews_Users1");
 
             entity.HasOne(d => d.Reviewer).WithMany(p => p.ReviewReviewers)
                 .HasForeignKey(d => d.ReviewerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Reviews_Users");
+
+            entity.HasOne(d => d.Service).WithMany(p => p.Reviews)
+                .HasForeignKey(d => d.ServiceId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_Reviews_Services");
         });
 
         modelBuilder.Entity<Role>(entity =>

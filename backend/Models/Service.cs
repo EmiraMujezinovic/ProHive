@@ -27,6 +27,8 @@ public partial class Service
 
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 
+    public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
+
     public virtual ServiceCategory ServiceCategory { get; set; } = null!;
 
     public virtual ICollection<ServiceTag> ServiceTags { get; set; } = new List<ServiceTag>();

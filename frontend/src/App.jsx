@@ -13,6 +13,7 @@ import MyServiceDetails from './pages/MyServiceDetails';
 import ClientServices from './pages/ClientServices';
 import ClientServiceDetails from './pages/ClientServiceDetails';
 import ClientOrders from './pages/ClientOrders';
+import FreelancerOrders from './pages/FreelancerOrders';
 
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
           </ProtectedRoute>
         } />
         <Route path="/clientorders" element={<ClientOrders />} />
+        <Route path="/freelancerorders" element={<FreelancerOrders />} />
       </Routes>
     </BrowserRouter>
   );

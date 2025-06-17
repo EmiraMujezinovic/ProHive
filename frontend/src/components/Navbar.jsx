@@ -17,6 +17,7 @@ const linksByRole = {
     'My Services',
     'Applications',
     'My Orders',
+    'Orders',
   ],
 };
 
@@ -36,6 +37,7 @@ const Navbar = () => {
     { name: 'Applications', to: '/applications', show: true },
     { name: 'Projects', to: '/projects', show: role === 'Freelancer' },
     { name: 'My Services', to: '/freelancerservices', show: role === 'Freelancer' },
+    { name: 'Orders', to: '/freelancerorders', show: role === 'Freelancer' },
   ].filter(link => link.show);
   const [profileImage, setProfileImage] = useState('/defaultprofile.jpg');
 
