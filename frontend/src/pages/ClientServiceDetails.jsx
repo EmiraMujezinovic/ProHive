@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import FavoriteButton from '../components/FavoriteButton';
 import OrderServiceButton from '../components/OrderServiceButton';
+import ServiceReviews from '../components/ServiceReviews';
 
 const ClientServiceDetails = () => {
   const { id } = useParams();
@@ -157,6 +158,8 @@ const ClientServiceDetails = () => {
                 <span className="font-semibold text-primary">Description:</span>
                 <div className="mt-1 whitespace-pre-line text-text">{service.Description || service.description}</div>
               </div>
+              {/* ServiceReviews component for average rating and reviews */}
+              <ServiceReviews serviceId={service.ServiceId || service.serviceId} />
               {/* Freelancer info */}
               <div
                 className="flex items-center gap-4 mt-4 p-4 bg-background rounded-lg border border-secondary cursor-pointer hover:bg-accent/5 transition relative"

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import FavoriteButton from './FavoriteButton';
+import ratingIcon from '../assets/icons/rating.png';
 
 /**
  * ClientServiceCard component for displaying a service to clients.
@@ -15,6 +16,7 @@ import FavoriteButton from './FavoriteButton';
  */
 const ClientServiceCard = ({ title, price, category, tags, profileImageUrl, fullName, freelancerProfileId, onClick, serviceId, isFavorited, onFavoriteToggle, favoriteButtonDisabled }) => {
   const [imageUrl, setImageUrl] = useState(profileImageUrl || '/defaultprofile.jpg');
+  const [rating, setRating] = useState(null);
 
   useEffect(() => {
     // Helper to resolve full image URL
@@ -58,6 +60,23 @@ const ClientServiceCard = ({ title, price, category, tags, profileImageUrl, full
     // eslint-disable-next-line
   }, [freelancerProfileId, profileImageUrl]);
 
+  useEffect(() => {
+    // Fetch average rating for this service
+    if (serviceId) {
+      fetch(`/api/Reviews/average-rating/service/${serviceId}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      })
+        .then(res => res.ok ? res.json() : Promise.reject())
+        .then(data => {
+          if (typeof data === 'number') setRating(data);
+          else if (data && typeof data.averageRating === 'number') setRating(data.averageRating);
+          else setRating(null);
+        })
+        .catch(() => setRating(null));
+    }
+    // eslint-disable-next-line
+  }, [serviceId]);
+
   return (
     <div
       className="bg-white rounded-lg shadow-md p-6 flex flex-col gap-2 border border-secondary hover:shadow-lg transition hover:scale-103 cursor-pointer"
@@ -100,6 +119,11 @@ const ClientServiceCard = ({ title, price, category, tags, profileImageUrl, full
             <span className="text-gray-400 text-xs">No tags</span>
           )}
         </div>
+      </div>
+      {/* Rating display */}
+      <div className="flex items-center gap-1 mt-2">
+        <img src={ratingIcon} alt="Rating" className="w-5 h-5" />
+        <span className="text-sm text-accent font-semibold">{rating !== null ? `${rating}/5` : 'No rating'}</span>
       </div>
     </div>
   );
