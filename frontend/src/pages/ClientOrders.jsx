@@ -8,7 +8,19 @@ const ClientOrders = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [userId, setUserId] = useState(null);
+  const [myReviews, setMyReviews] = useState([]);
 
+  // Get userId from JWT
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      setUserId(payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"] || payload.userId || payload.id);
+    }
+  }, []);
+
+  // Fetch orders
   useEffect(() => {
     const fetchOrders = async () => {
       setLoading(true);
@@ -28,6 +40,22 @@ const ClientOrders = () => {
     fetchOrders();
   }, []);
 
+  // Fetch my reviews
+  useEffect(() => {
+    if (!userId) return;
+    fetch(`/api/Reviews/reviewer/${userId}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+    })
+      .then(res => res.ok ? res.json() : Promise.reject())
+      .then(data => setMyReviews(Array.isArray(data) ? data : []))
+      .catch(() => setMyReviews([]));
+  }, [userId]);
+
+  // Helper: get review for a serviceId
+  const getReviewForService = (serviceId) => {
+    return myReviews.find(r => r.serviceId === serviceId);
+  };
+
   return (
     <>
       <Navbar />
@@ -39,14 +67,23 @@ const ClientOrders = () => {
           {orders.length === 0 && !loading && !error && (
             <div className="text-gray-400 text-center">You have no orders yet.</div>
           )}
-          {orders.map(order => (
-            <div key={order.orderId} onClick={() => setSelectedOrder(order)} className="cursor-pointer">
-              <OrderCard order={order} />
-            </div>
-          ))}
+          {orders.map(order => {
+            const review = getReviewForService(order.serviceId);
+            return (
+              <div key={order.orderId} onClick={() => setSelectedOrder(order)} className="cursor-pointer">
+                <OrderCard order={order} review={review} />
+              </div>
+            );
+          })}
         </div>
         {selectedOrder && (
-          <OrderDetailsModal order={selectedOrder} onClose={() => setSelectedOrder(null)} />
+          <OrderDetailsModal 
+            order={selectedOrder} 
+            onClose={() => setSelectedOrder(null)} 
+            review={getReviewForService(selectedOrder.serviceId)}
+            userId={userId}
+            refreshOrders={() => window.location.reload()}
+          />
         )}
       </div>
     </>

@@ -115,7 +115,7 @@ const FreelancerOrderDetailsModal = ({ order, client, service, onClose }) => {
         <div className="flex gap-3 mt-4 justify-end">
           {order.orderStatusId === 1 && (
             <button
-              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 font-semibold"
+              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 font-semibold cursor-pointer"
               onClick={handleAccept}
               disabled={actionMessage}
             >
@@ -124,7 +124,7 @@ const FreelancerOrderDetailsModal = ({ order, client, service, onClose }) => {
           )}
           {(order.orderStatusId === 1 || order.orderStatusId === 2) && (
             <button
-              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 font-semibold"
+              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 font-semibold cursor-pointer"
               onClick={handleCancel}
               disabled={actionMessage}
             >
@@ -133,7 +133,7 @@ const FreelancerOrderDetailsModal = ({ order, client, service, onClose }) => {
           )}
           {order.orderStatusId === 2 && (
             <button
-              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 font-semibold"
+              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 font-semibold cursor-pointer"
               onClick={handleComplete}
               disabled={actionMessage}
             >
