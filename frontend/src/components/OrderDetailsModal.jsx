@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ratingIcon from '../assets/icons/rating.png';
+import deleteIcon from '../assets/icons/delete.png';
 
 const OrderDetailsModal = ({ order, onClose, review, userId, refreshOrders }) => {
   const [freelancer, setFreelancer] = useState(null);
@@ -174,14 +175,42 @@ const OrderDetailsModal = ({ order, onClose, review, userId, refreshOrders }) =>
           <span className="font-semibold text-primary">Order status:</span>
           <span className="text-base font-semibold text-accent">{order.orderStatus?.status || 'Unknown'}</span>
         </div>
-        {/* Review prikaz i unos */}
         <div className="flex flex-col gap-2 mt-2">
           <span className="font-semibold text-primary">Your review for this service:</span>
           {review ? (
-            <div className="flex items-center gap-2 bg-background border border-secondary rounded p-2">
-              <img src={ratingIcon} alt="Rating" className="w-5 h-5" />
-              <span className="text-accent font-bold">{review.rating}/5</span>
-              <span className="text-text ml-2">{review.comment}</span>
+            <div className="flex items-center bg-background border border-secondary rounded p-2 justify-between">
+              <div className="flex items-center gap-2">
+                <img src={ratingIcon} alt="Rating" className="w-5 h-5" />
+                <span className="text-accent font-bold">{review.rating}/5</span>
+                <span className="text-text ml-2">{review.comment}</span>
+              </div>
+              <button
+                className="ml-2 p-1 rounded hover:bg-red-100 transition self-start cursor-pointer"
+                title="Delete review"
+                onClick={async (e) => {
+                  e.stopPropagation();
+                  setActionMessage(null);
+                  setActionError(null);
+                  try {
+                    const res = await fetch(`/api/Reviews/${review.reviewId}`, {
+                      method: 'DELETE',
+                      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+                    });
+                    if (res.ok) {
+                      setActionMessage('Review deleted successfully!');
+                      setTimeout(() => {
+                        if (refreshOrders) refreshOrders();
+                      }, 1200);
+                    } else {
+                      setActionError('Failed to delete review.');
+                    }
+                  } catch {
+                    setActionError('Failed to delete review.');
+                  }
+                }}
+              >
+                <img src={deleteIcon} alt="Delete" className="w-5 h-5" />
+              </button>
             </div>
           ) : (
             <span className="text-gray-400">No rating left</span>
