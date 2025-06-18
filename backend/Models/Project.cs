@@ -17,6 +17,8 @@ public partial class Project
 
     public DateOnly Deadline { get; set; }
 
+    public string ProjectStatus { get; set; } = null!;
+
     public virtual ClientProfile ClientProfile { get; set; } = null!;
 
     public virtual ICollection<ProjectApplication> ProjectApplications { get; set; } = new List<ProjectApplication>();

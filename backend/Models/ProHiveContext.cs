@@ -228,6 +228,9 @@ public partial class ProHiveContext : DbContext
             entity.Property(e => e.Description)
                 .HasMaxLength(500)
                 .HasColumnName("description");
+            entity.Property(e => e.ProjectStatus)
+                .HasMaxLength(50)
+                .HasColumnName("projectStatus");
             entity.Property(e => e.Title)
                 .HasMaxLength(100)
                 .HasColumnName("title");

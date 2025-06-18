@@ -8,5 +8,15 @@ namespace backend.DTOs
         public string Description { get; set; } = null!;
         public decimal Budget { get; set; }
         public DateOnly Deadline { get; set; }
+        public string ProjectStatus { get; set; } = null!;
+    }
+
+    // DTO za azuriranje projekta
+    public class UpdateProjectDto
+    {
+        public string? Title { get; set; }
+        public string? Description { get; set; }
+        public decimal? Budget { get; set; }
+        public DateOnly? Deadline { get; set; }
     }
 }

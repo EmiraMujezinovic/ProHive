@@ -9,6 +9,8 @@ const FreelancerOrders = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [userId, setUserId] = useState(null);
+  const [myReviews, setMyReviews] = useState([]);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -43,6 +45,30 @@ const FreelancerOrders = () => {
     };
     fetchOrders();
   }, []);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      setUserId(payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"] || payload.userId || payload.id);
+    }
+  }, []);
+
+  // Fetch reviews left by freelancer
+  useEffect(() => {
+    if (!userId) return;
+    fetch(`/api/Reviews/reviewer/${userId}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+    })
+      .then(res => res.ok ? res.json() : Promise.reject())
+      .then(data => setMyReviews(Array.isArray(data) ? data : []))
+      .catch(() => setMyReviews([]));
+  }, [userId]);
+
+  // Helper: get review for a client (revieweeId = userId klijenta)
+  const getReviewForClient = (clientUserId) => {
+    return myReviews.find(r => r.revieweeId === clientUserId);
+  };
 
   // Fetch service details on demand when modal opens
   const fetchService = async (serviceId) => {
@@ -83,7 +109,7 @@ const FreelancerOrders = () => {
             return (
               <div
                 key={order.orderId}
-                className="bg-white rounded-lg shadow p-4 border border-secondary flex flex-col gap-2 cursor-pointer hover:bg-accent/5 transition"
+                className="bg-white rounded-lg shadow p-4 border border-secondary flex flex-col gap-2 cursor-pointer hover:bg-accent/5 transition hover:scale-102"
                 onClick={() => handleOrderClick(order)}
               >
                 <div className="flex flex-row items-center justify-between gap-2">

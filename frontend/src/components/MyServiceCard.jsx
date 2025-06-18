@@ -1,4 +1,5 @@
 import React from 'react';
+import ServiceReviews from './ServiceReviews';
 
 /**
  * MyServiceCard component for displaying a freelancer's service.
@@ -8,8 +9,9 @@ import React from 'react';
  * - category: string
  * - tags: array of strings
  * - onClick: function (optional)
+ * - serviceId: number (required for rating)
  */
-const MyServiceCard = ({ title, price, category, tags, onClick }) => {
+const MyServiceCard = ({ title, price, category, tags, onClick, serviceId }) => {
   return (
     <div
       className="bg-white rounded-lg shadow-md p-6 flex flex-col gap-2 border border-secondary hover:shadow-lg transition hover:scale-103 cursor-pointer"
@@ -32,6 +34,10 @@ const MyServiceCard = ({ title, price, category, tags, onClick }) => {
         ) : (
           <span className="text-gray-400 text-xs">No tags</span>
         )}
+      </div>
+      {/* Average rating prikaz */}
+      <div className="mt-2">
+        <ServiceReviews serviceId={serviceId} showOnlyAverage={true} />
       </div>
     </div>
   );

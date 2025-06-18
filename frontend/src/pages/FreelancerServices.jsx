@@ -100,6 +100,7 @@ const FreelancerServices = () => {
               category={service.Category || service.category}
               tags={service.Tags ? (service.Tags.map(t => t.Tag1 || t.tag1)) : (service.tags ? service.tags.map(t => t.Tag1 || t.tag1) : [])}
               onClick={() => navigate(`/myservicedetails/${service.ServiceId || service.serviceId}`)}
+              serviceId={service.ServiceId || service.serviceId}
             />
           ))}
         </div>

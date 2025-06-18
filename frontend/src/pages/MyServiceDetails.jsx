@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import EditService from '../components/EditService';
+import ServiceReviews from '../components/ServiceReviews';
 import editIcon from '../assets/icons/edit.png';
 import deleteIcon from '../assets/icons/delete.png';
 
@@ -96,6 +97,10 @@ const MyServiceDetails = () => {
               <div className="text-lg text-primary font-semibold">
                 Created: <span className="text-text font-bold">{service.CreatedAt ? (new Date(service.CreatedAt).toLocaleDateString()) : (service.createdAt ? (new Date(service.createdAt).toLocaleDateString()) : '')}</span>
               </div>
+            </div>
+            {/* Prikaz svih reviews za ovaj servis */}
+            <div className="mt-6">
+              <ServiceReviews serviceId={service.ServiceId || service.serviceId} />
             </div>
           </div>
           {showEdit && <EditService service={service} onClose={() => setShowEdit(false)} />}
