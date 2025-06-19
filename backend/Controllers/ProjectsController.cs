@@ -146,12 +146,13 @@ namespace backend.Controllers
         }
 
         // GET: api/Projects/all
-        // Returns all projects in the database
+        // Returns all projects in the database with status 'Open'
         [HttpGet("all")]
         [Authorize]
         public async Task<IActionResult> GetAllProjects()
         {
             var projects = await _context.Projects
+                .Where(p => p.ProjectStatus == "Open")
                 .Select(p => new ProjectDto
                 {
                     ProjectId = p.ProjectId,

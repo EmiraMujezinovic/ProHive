@@ -17,6 +17,10 @@ public partial class Review
 
     public int? ServiceId { get; set; }
 
+    public int? ProjectId { get; set; }
+
+    public virtual Project? Project { get; set; }
+
     public virtual User? Reviewee { get; set; }
 
     public virtual User Reviewer { get; set; } = null!;

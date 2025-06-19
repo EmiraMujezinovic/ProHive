@@ -19,6 +19,10 @@ import AddProjectForm from './pages/AddProjectForm';
 import ClientProjectDetails from './pages/ClientProjectDetails';
 import ClientApplications from './pages/ClientApplications';
 import ClientApplicationDetails from './pages/ClientApplicationDetails';
+import FreelancerProjects from './pages/FreelancerProjects';
+import FreelancerProjectDetails from './pages/FreelancerProjectDetails';
+import FreelancerApplications from './pages/FreelancerApplications';
+import FreelancerApplicationDetails from './pages/FreelancerApplicationDetails';
 
 function App() {
   return (
@@ -81,6 +85,10 @@ function App() {
             <ClientApplicationDetails />
           </ProtectedRoute>
         } />
+        <Route path="/freelancerprojects" element={<FreelancerProjects />} />
+        <Route path="/freelancerproject/:id" element={<FreelancerProjectDetails />} />
+        <Route path="/freelancerapplications" element={<FreelancerApplications />} />
+        <Route path="/freelancerapplication/:id" element={<FreelancerApplicationDetails />} />
       </Routes>
     </BrowserRouter>
   );

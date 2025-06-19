@@ -271,10 +271,16 @@ public partial class ProHiveContext : DbContext
             entity.Property(e => e.Comment)
                 .HasMaxLength(100)
                 .HasColumnName("comment");
+            entity.Property(e => e.ProjectId).HasColumnName("projectID");
             entity.Property(e => e.Rating).HasColumnName("rating");
             entity.Property(e => e.RevieweeId).HasColumnName("revieweeID");
             entity.Property(e => e.ReviewerId).HasColumnName("reviewerID");
             entity.Property(e => e.ServiceId).HasColumnName("serviceID");
+
+            entity.HasOne(d => d.Project).WithMany(p => p.Reviews)
+                .HasForeignKey(d => d.ProjectId)
+                .OnDelete(DeleteBehavior.SetNull)
+                .HasConstraintName("FK_Reviews_Projects");
 
             entity.HasOne(d => d.Reviewee).WithMany(p => p.ReviewReviewees)
                 .HasForeignKey(d => d.RevieweeId)

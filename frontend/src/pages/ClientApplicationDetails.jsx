@@ -54,6 +54,38 @@ const ClientApplicationDetails = () => {
     window.location.reload();
   };
 
+  // Funkcija za slanje zahteva za promenu statusa aplikacije
+  const handleStatusAction = async (action) => {
+    if (!application) return;
+    let url = '';
+    switch (action) {
+      case 'accept':
+        url = `/api/Applications/accept/${application.applicationId}`;
+        break;
+      case 'reject':
+        url = `/api/Applications/reject/${application.applicationId}`;
+        break;
+      case 'cancel':
+        url = `/api/Applications/cancel/${application.applicationId}`;
+        break;
+      case 'complete':
+        url = `/api/Applications/complete/${application.applicationId}`;
+        break;
+      default:
+        return;
+    }
+    try {
+      const res = await fetch(url, {
+        method: 'PUT',
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      });
+      if (!res.ok) throw new Error('Action failed.');
+      window.location.reload();
+    } catch {
+      setError('Action failed.');
+    }
+  };
+
   return (
     <>
       <Navbar />
@@ -72,6 +104,39 @@ const ClientApplicationDetails = () => {
             <div>
               <span className="font-semibold text-primary">Status:</span> <span className="text-accent font-bold">{statusMap[application.applicationStatusId] || 'Unknown'}</span>
             </div>
+            {/* Dugmad za akcije u zavisnosti od statusa */}
+            {application.applicationStatusId === 1 && (
+              <div className="flex gap-4 mt-4">
+                <button
+                  className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 font-semibold"
+                  onClick={() => handleStatusAction('accept')}
+                >
+                  Accept
+                </button>
+                <button
+                  className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 font-semibold"
+                  onClick={() => handleStatusAction('reject')}
+                >
+                  Reject
+                </button>
+              </div>
+            )}
+            {application.applicationStatusId === 2 && (
+              <div className="flex gap-4 mt-4">
+                <button
+                  className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 font-semibold"
+                  onClick={() => handleStatusAction('cancel')}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="bg-accent text-white px-4 py-2 rounded hover:bg-accent/80 font-semibold"
+                  onClick={() => handleStatusAction('complete')}
+                >
+                  Complete
+                </button>
+              </div>
+            )}
             {freelancer && (
               <div className="mt-4 p-4 bg-background border border-secondary rounded-lg flex flex-col sm:flex-row gap-4 items-center">
                 <img

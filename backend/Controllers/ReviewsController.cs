@@ -32,7 +32,8 @@ namespace backend.Controllers
                     RevieweeId = r.RevieweeId,
                     Rating = r.Rating,
                     Comment = r.Comment,
-                    ServiceId = r.ServiceId
+                    ServiceId = r.ServiceId,
+                    ProjectId = r.ProjectId
                 })
                 .ToListAsync();
 
@@ -54,7 +55,8 @@ namespace backend.Controllers
                     RevieweeId = r.RevieweeId,
                     Rating = r.Rating,
                     Comment = r.Comment,
-                    ServiceId = r.ServiceId
+                    ServiceId = r.ServiceId,
+                    ProjectId = r.ProjectId
                 })
                 .ToListAsync();
 
@@ -76,7 +78,8 @@ namespace backend.Controllers
                     RevieweeId = r.RevieweeId,
                     Rating = r.Rating,
                     Comment = r.Comment,
-                    ServiceId = r.ServiceId
+                    ServiceId = r.ServiceId,
+                    ProjectId = r.ProjectId
                 })
                 .ToListAsync();
 
@@ -106,7 +109,8 @@ namespace backend.Controllers
                 RevieweeId = review.RevieweeId,
                 Rating = review.Rating,
                 Comment = review.Comment,
-                ServiceId = review.ServiceId
+                ServiceId = review.ServiceId,
+                ProjectId = review.ProjectId
             };
             return Ok(dto);
         }
@@ -163,6 +167,35 @@ namespace backend.Controllers
             return Ok(new { averageRating = average });
         }
 
+        // GET: api/Reviews/by-project/{projectId}
+        // Omogu?ava prijavljenom korisniku da dobavi svoj review za dati projekat
+        [HttpGet("by-project/{projectId}")]
+        [Authorize]
+        public async Task<IActionResult> GetMyReviewByProjectId(int projectId)
+        {
+            // Get userId from JWT token
+            var userIdStr = User.FindFirstValue(System.Security.Claims.ClaimTypes.NameIdentifier);
+            if (!int.TryParse(userIdStr, out int userId))
+                return Unauthorized();
+
+            // Prona?i review za dati projekat i ovog korisnika
+            var review = await _context.Reviews.FirstOrDefaultAsync(r => r.ProjectId == projectId && r.ReviewerId == userId);
+            if (review == null)
+                return NotFound(new { message = "You have not left a review for this project." });
+
+            var dto = new ReviewDto
+            {
+                ReviewId = review.ReviewId,
+                ReviewerId = review.ReviewerId,
+                RevieweeId = review.RevieweeId,
+                Rating = review.Rating,
+                Comment = review.Comment,
+                ServiceId = review.ServiceId,
+                ProjectId = review.ProjectId
+            };
+            return Ok(dto);
+        }
+
         // POST: api/Reviews
         // Allows a logged-in client to leave a review for a service
         [HttpPost]
@@ -196,7 +229,8 @@ namespace backend.Controllers
                     RevieweeId = null, // Not set for this scenario
                     Rating = dto.Rating,
                     Comment = dto.Comment,
-                    ServiceId = dto.ServiceId
+                    ServiceId = dto.ServiceId,
+                    ProjectId = null // Explicitly set
                 };
                 _context.Reviews.Add(review);
                 await _context.SaveChangesAsync();
@@ -241,11 +275,63 @@ namespace backend.Controllers
                     RevieweeId = dto.RevieweeId,
                     Rating = dto.Rating,
                     Comment = dto.Comment,
-                    ServiceId = null // Not set for this scenario
+                    ServiceId = null, // Not set for this scenario
+                    ProjectId = null // Explicitly set
                 };
                 _context.Reviews.Add(review);
                 await _context.SaveChangesAsync();
                 return Ok(new { message = "Review for client submitted successfully." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while submitting the review.", error = ex.Message });
+            }
+        }
+
+        // POST: api/Reviews/freelancer-to-project
+        // Allows a logged-in freelancer to leave a review for a project
+        [HttpPost("freelancer-to-project")]
+        [Authorize(Roles = "Freelancer")]
+        public async Task<IActionResult> LeaveReviewForProject([FromBody] ReviewDto dto)
+        {
+            // Validate rating
+            if (dto.Rating < 1 || dto.Rating > 5)
+                return BadRequest(new { message = "Review is not valid. Rating must be between 1 and 5." });
+
+            // Get userId from JWT token (freelancer)
+            var userIdStr = User.FindFirstValue(System.Security.Claims.ClaimTypes.NameIdentifier);
+            if (!int.TryParse(userIdStr, out int userId))
+                return Unauthorized();
+
+            // Find freelancer profile for this user
+            var freelancerProfile = await _context.FreelancerProfiles.FirstOrDefaultAsync(fp => fp.UserId == userId);
+            if (freelancerProfile == null)
+                return BadRequest(new { message = "Freelancer profile not found." });
+
+            // Check if the project exists
+            var project = await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == dto.ProjectId);
+            if (project == null)
+                return NotFound(new { message = "Project not found." });
+
+            // Check if review already exists for this freelancer and project
+            var alreadyReviewed = await _context.Reviews.AnyAsync(r => r.ProjectId == dto.ProjectId && r.ReviewerId == userId);
+            if (alreadyReviewed)
+                return BadRequest(new { message = "You have already left a review for this project." });
+
+            try
+            {
+                var review = new Review
+                {
+                    ReviewerId = userId,
+                    RevieweeId = null,
+                    Rating = dto.Rating,
+                    Comment = dto.Comment,
+                    ServiceId = null,
+                    ProjectId = dto.ProjectId
+                };
+                _context.Reviews.Add(review);
+                await _context.SaveChangesAsync();
+                return Ok(new { message = "Review for project submitted successfully." });
             }
             catch (Exception ex)
             {
@@ -274,6 +360,5 @@ namespace backend.Controllers
 
             return Ok(new { message = "Review deleted successfully." });
         }
-
     }
 }

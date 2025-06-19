@@ -34,8 +34,8 @@ const Navbar = () => {
     { name: 'Services', to: '/clientservices', show: role === 'Client' },
     { name: 'My Orders', to: '/clientorders', show: role === 'Client' },
     { name: 'My Projects', to: '/myprojects', show: role === 'Client' },
-    { name: 'Applications', to: '/applications', show: true },
-    { name: 'Projects', to: '/projects', show: role === 'Freelancer' },
+    { name: 'Applications', to: role === 'Freelancer' ? '/freelancerapplications' : '/applications', show: true },
+    { name: 'Projects', to: '/freelancerprojects', show: role === 'Freelancer' },
     { name: 'My Services', to: '/freelancerservices', show: role === 'Freelancer' },
     { name: 'Orders', to: '/freelancerorders', show: role === 'Freelancer' },
   ].filter(link => link.show);

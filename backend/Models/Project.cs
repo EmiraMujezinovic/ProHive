@@ -22,4 +22,6 @@ public partial class Project
     public virtual ClientProfile ClientProfile { get; set; } = null!;
 
     public virtual ICollection<ProjectApplication> ProjectApplications { get; set; } = new List<ProjectApplication>();
+
+    public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
 }
