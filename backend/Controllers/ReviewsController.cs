@@ -196,6 +196,29 @@ namespace backend.Controllers
             return Ok(dto);
         }
 
+        // GET: api/Reviews/all-by-project/{projectId}
+        // Omogu?ava prijavljenom korisniku da dobije sve reviews za dati projekat
+        [HttpGet("all-by-project/{projectId}")]
+        [Authorize]
+        public async Task<IActionResult> GetAllReviewsByProjectId(int projectId)
+        {
+            var reviews = await _context.Reviews
+                .Where(r => r.ProjectId == projectId)
+                .Select(r => new ReviewDto
+                {
+                    ReviewId = r.ReviewId,
+                    ReviewerId = r.ReviewerId,
+                    RevieweeId = r.RevieweeId,
+                    Rating = r.Rating,
+                    Comment = r.Comment,
+                    ServiceId = r.ServiceId,
+                    ProjectId = r.ProjectId
+                })
+                .ToListAsync();
+
+            return Ok(reviews);
+        }
+
         // POST: api/Reviews
         // Allows a logged-in client to leave a review for a service
         [HttpPost]

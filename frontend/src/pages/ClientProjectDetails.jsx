@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar';
 import editIcon from '../assets/icons/edit.png';
 import deleteIcon from '../assets/icons/delete.png';
 import MessageModal from '../components/MessageModal';
+import ProjectReviews from '../components/ProjectReviews';
 
 const ClientProjectDetails = () => {
   const { id } = useParams();
@@ -120,7 +121,7 @@ const ClientProjectDetails = () => {
         {loading && <div className="text-gray-500">Loading...</div>}
         {project && (
           <>
-            <div className="bg-white rounded-lg shadow-md p-8 w-full max-w-2xl mt-8 border-secondary border relative">
+            <div className="bg-white rounded-lg shadow-md p-8 w-full max-w-2xl mt-8 border-secondary border relative flex flex-col gap-6">
               <div className="flex items-center justify-between mb-4">
                 <h1 className="text-3xl font-bold text-primary">{project.title}</h1>
                 <div className="flex gap-3">
@@ -145,6 +146,9 @@ const ClientProjectDetails = () => {
               <div className="mb-5">
                 <span className="font-semibold text-primary">Deadline:</span>
                 <div className="mt-1 text-text">{project.deadline}</div>
+              </div>
+              <div className="border-t border-secondary pt-6 mt-2">
+                <ProjectReviews projectId={project.projectId} />
               </div>
             </div>
             {showEdit && (

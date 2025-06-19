@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import MessageModal from '../components/MessageModal';
+import ProjectReviews from '../components/ProjectReviews';
 
 const FreelancerProjectDetails = () => {
   const { id } = useParams();
@@ -88,30 +89,37 @@ const FreelancerProjectDetails = () => {
           <MessageModal message={success} onClose={() => setSuccess('')} title="Success" type="success" />
         )}
         {project && (
-          <div className="bg-white rounded-lg shadow-md p-8 w-full max-w-2xl border-secondary border flex flex-col gap-4">
-            <div className="text-2xl font-bold text-primary mb-2">{project.title}</div>
-            <div className="text-text mb-2"><span className="font-semibold text-primary">Description:</span> {project.description}</div>
-            <div className="text-text mb-2"><span className="font-semibold text-primary">Budget:</span> ${project.budget}</div>
-            <div className="text-text mb-2"><span className="font-semibold text-primary">Deadline:</span> {project.deadline}</div>
-            <div className="text-text mb-2"><span className="font-semibold text-primary">Status:</span> {project.projectStatus}</div>
-            {client && client.user && client.clientProfile && (
-              <div className="mt-6 p-4 bg-background border border-secondary rounded-lg flex flex-col sm:flex-row gap-4 items-center">
-                <img
-                  src={client.user.profileImageUrl && client.user.profileImageUrl.startsWith('/profile-images')
-                    ? (import.meta.env.VITE_BACKEND_URL || 'https://localhost:7156') + client.user.profileImageUrl
-                    : (client.user.profileImageUrl || '/defaultprofile.jpg')}
-                  alt="Profile"
-                  className="w-20 h-20 rounded-full object-cover border border-secondary"
-                  onError={e => { e.currentTarget.src = '/defaultprofile.jpg'; }}
-                />
-                <div className="flex flex-col gap-1">
-                  <span className="text-lg font-bold text-primary">{client.user.fullName}</span>
-                  <span className="text-accent">{client.user.email}</span>
-                  <span className="text-text">Job title: <span className="font-semibold text-primary">{client.clientProfile.jobTitle}</span></span>
-                </div>
+          <>
+            <div className="bg-white rounded-lg shadow-md p-8 w-full max-w-2xl border-secondary border flex flex-col gap-6">
+              <div>
+                <div className="text-2xl font-bold text-primary mb-2">{project.title}</div>
+                <div className="text-text mb-2"><span className="font-semibold text-primary">Description:</span> {project.description}</div>
+                <div className="text-text mb-2"><span className="font-semibold text-primary">Budget:</span> ${project.budget}</div>
+                <div className="text-text mb-2"><span className="font-semibold text-primary">Deadline:</span> {project.deadline}</div>
+                <div className="text-text mb-2"><span className="font-semibold text-primary">Status:</span> {project.projectStatus}</div>
+                {client && client.user && client.clientProfile && (
+                  <div className="mt-6 p-4 bg-background border border-secondary rounded-lg flex flex-col sm:flex-row gap-4 items-center">
+                    <img
+                      src={client.user.profileImageUrl && client.user.profileImageUrl.startsWith('/profile-images')
+                        ? (import.meta.env.VITE_BACKEND_URL || 'https://localhost:7156') + client.user.profileImageUrl
+                        : (client.user.profileImageUrl || '/defaultprofile.jpg')}
+                      alt="Profile"
+                      className="w-20 h-20 rounded-full object-cover border border-secondary"
+                      onError={e => { e.currentTarget.src = '/defaultprofile.jpg'; }}
+                    />
+                    <div className="flex flex-col gap-1">
+                      <span className="text-lg font-bold text-primary">{client.user.fullName}</span>
+                      <span className="text-accent">{client.user.email}</span>
+                      <span className="text-text">Job title: <span className="font-semibold text-primary">{client.clientProfile.jobTitle}</span></span>
+                    </div>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+              <div className="border-t border-secondary pt-6 mt-2">
+                <ProjectReviews projectId={project.projectId} />
+              </div>
+            </div>
+          </>
         )}
         {showApply && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
