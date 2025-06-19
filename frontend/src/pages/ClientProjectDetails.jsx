@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import editIcon from '../assets/icons/edit.png';
 import deleteIcon from '../assets/icons/delete.png';
+import MessageModal from '../components/MessageModal';
 
 const ClientProjectDetails = () => {
   const { id } = useParams();
@@ -16,6 +17,7 @@ const ClientProjectDetails = () => {
   const [editData, setEditData] = useState({});
   const [editLoading, setEditLoading] = useState(false);
   const [editSuccess, setEditSuccess] = useState('');
+  const [showErrorModal, setShowErrorModal] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -90,7 +92,13 @@ const ClientProjectDetails = () => {
         setDeleteSuccess('Project deleted successfully.');
         setTimeout(() => navigate('/myprojects'), 1200);
       } else {
-        setError('Failed to delete project.');
+        const data = await res.json().catch(() => ({}));
+        if (data && data.message && data.message.toLowerCase().includes('not allowed to delete')) {
+          setError('You are not allowed to delete a finished project.');
+          setShowErrorModal(true);
+        } else {
+          setError('Failed to delete project.');
+        }
       }
     } catch {
       setError('Failed to delete project.');
@@ -98,12 +106,18 @@ const ClientProjectDetails = () => {
     setDeleteLoading(false);
   };
 
+  // Funkcija za zatvaranje modala i refresh stranice
+  const handleErrorModalClose = () => {
+    setShowErrorModal(false);
+    setError('');
+    window.location.reload();
+  };
+
   return (
     <>
       <Navbar />
       <div className="min-h-screen bg-background px-4 py-8 flex flex-col items-center pt-20">
         {loading && <div className="text-gray-500">Loading...</div>}
-        {error && <div className="text-red-500 mb-4">{error}</div>}
         {project && (
           <>
             <div className="bg-white rounded-lg shadow-md p-8 w-full max-w-2xl mt-8 border-secondary border relative">
@@ -219,6 +233,14 @@ const ClientProjectDetails = () => {
                   {deleteSuccess && <div className="mt-4 text-green-600 font-semibold text-center">{deleteSuccess}</div>}
                 </div>
               </div>
+            )}
+            {showErrorModal && (
+              <MessageModal
+                message={error}
+                onClose={handleErrorModalClose}
+                title="Error"
+                type="error"
+              />
             )}
           </>
         )}

@@ -259,7 +259,7 @@ namespace backend.Controllers
         public async Task<IActionResult> GetProjectApplicationById(int applicationId)
         {
             var application = await _context.ProjectApplications
-                .Include(a => a.Project)
+                .Include(a => a.Project).ThenInclude(p => p.ClientProfile)
                 .Include(a => a.FreelancerProfile)
                 .Include(a => a.ApplicationStatus)
                 .FirstOrDefaultAsync(a => a.ApplicationId == applicationId);

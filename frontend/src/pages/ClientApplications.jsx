@@ -62,7 +62,11 @@ const ClientApplications = () => {
             <div className="text-gray-400 text-center">No applications found.</div>
           )}
           {applications.map(app => (
-            <div key={app.applicationId} className="bg-white rounded-lg shadow-md p-5 border border-secondary flex flex-col gap-2">
+            <div
+              key={app.applicationId}
+              className="bg-white rounded-lg shadow-md p-5 border border-secondary flex flex-col gap-2 cursor-pointer hover:bg-accent/5 transition"
+              onClick={() => window.location.href = `/clientapplicationdetails/${app.applicationId}`}
+            >
               <span className="text-xl font-bold text-primary">{app.projectTitle}</span>
               <div className="flex flex-row gap-6 items-center">
                 <span className="text-accent font-semibold">Deadline: {projectDeadlines[app.projectId] ? new Date(projectDeadlines[app.projectId]).toLocaleDateString() : 'Loading...'}</span>

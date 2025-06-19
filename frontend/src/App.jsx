@@ -18,6 +18,7 @@ import ClientProjectsPage from './pages/ClientProjectsPage';
 import AddProjectForm from './pages/AddProjectForm';
 import ClientProjectDetails from './pages/ClientProjectDetails';
 import ClientApplications from './pages/ClientApplications';
+import ClientApplicationDetails from './pages/ClientApplicationDetails';
 
 function App() {
   return (
@@ -73,6 +74,11 @@ function App() {
         <Route path="/applications" element={
           <ProtectedRoute requiredRole="Client">
             <ClientApplications />
+          </ProtectedRoute>
+        } />
+        <Route path="/clientapplicationdetails/:id" element={
+          <ProtectedRoute requiredRole="Client">
+            <ClientApplicationDetails />
           </ProtectedRoute>
         } />
       </Routes>

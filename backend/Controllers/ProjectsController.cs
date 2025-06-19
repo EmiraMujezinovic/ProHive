@@ -69,6 +69,10 @@ namespace backend.Controllers
             if (project == null)
                 return NotFound(new { message = "Project not found or you do not have permission to delete it." });
 
+            // Check if project is finished
+            if (project.ProjectStatus == "Finished")
+                return BadRequest(new { message = "You are not allowed to delete a finished project." });
+
             _context.Projects.Remove(project);
             await _context.SaveChangesAsync();
 
