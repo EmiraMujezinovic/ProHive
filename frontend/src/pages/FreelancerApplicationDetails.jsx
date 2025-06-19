@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import MessageModal from '../components/MessageModal';
+import ReviewDisplay from '../components/ReviewDisplay';
+import ratingIcon from '../assets/icons/rating.png';
+import deleteIcon from '../assets/icons/delete.png';
 
 const FreelancerApplicationDetails = () => {
   const { id } = useParams();
@@ -11,6 +14,11 @@ const FreelancerApplicationDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [review, setReview] = useState(null);
+  const [reviewLoading, setReviewLoading] = useState(true);
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewComment, setReviewComment] = useState('');
 
   useEffect(() => {
     const fetchDetails = async () => {
@@ -50,6 +58,19 @@ const FreelancerApplicationDetails = () => {
     fetchDetails();
   }, [id]);
 
+  // Fetch review for this project by this freelancer
+  useEffect(() => {
+    if (!project) return;
+    setReviewLoading(true);
+    fetch(`/api/Reviews/by-project/${project.projectId}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    })
+      .then(res => res.ok ? res.json() : res.json().then(e => { throw e; }))
+      .then(data => setReview(data))
+      .catch(err => setReview(null))
+      .finally(() => setReviewLoading(false));
+  }, [project]);
+
   // Akcija za status dugmad
   const handleStatusAction = async (action) => {
     if (!application) return;
@@ -74,6 +95,54 @@ const FreelancerApplicationDetails = () => {
       setTimeout(() => window.location.reload(), 1200);
     } catch {
       setError('Action failed.');
+    }
+  };
+
+  // Slanje review-a
+  const handleReviewSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setSuccess('');
+    try {
+      const res = await fetch('/api/Reviews/freelancer-to-project', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({
+          projectId: project.projectId,
+          rating: reviewRating,
+          comment: reviewComment,
+        }),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || 'Failed to leave review.');
+      }
+      setShowReviewForm(false);
+      setSuccess('Review submitted successfully!');
+      setTimeout(() => window.location.reload(), 1200);
+    } catch (err) {
+      setError(err.message || 'Failed to leave review.');
+    }
+  };
+
+  // Brisanje review-a
+  const handleDeleteReview = async () => {
+    if (!review || !review.reviewId) return;
+    setError('');
+    setSuccess('');
+    try {
+      const res = await fetch(`/api/Reviews/${review.reviewId}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      });
+      if (!res.ok) throw new Error('Failed to delete review.');
+      setSuccess('Review deleted successfully!');
+      setTimeout(() => window.location.reload(), 1200);
+    } catch {
+      setError('Failed to delete review.');
     }
   };
 
@@ -140,11 +209,66 @@ const FreelancerApplicationDetails = () => {
                   </div>
                 </div>
               )}
+              {/* Prikaz review-a */}
+              {reviewLoading ? (
+                <div className="text-gray-500">Loading review...</div>
+              ) : review && review.rating ? (
+                <ReviewDisplay review={review} onDelete={handleDeleteReview} />
+              ) : (
+                <div className="mt-4 text-gray-500">You have not left a review for this project.</div>
+              )}
+              {/* Leave review dugme i forma */}
+              {!review && !reviewLoading && application.applicationStatusId !== 1 && !showReviewForm && (
+                <button
+                  className="bg-accent text-white px-4 py-2 rounded hover:bg-accent/80 font-semibold mt-2 w-fit"
+                  onClick={() => setShowReviewForm(true)}
+                >
+                  Leave review
+                </button>
+              )}
+              {showReviewForm && (
+                <form onSubmit={handleReviewSubmit} className="mt-4 flex flex-col gap-3 bg-background border border-accent rounded-lg p-4">
+                  <label className="font-semibold text-primary">Rating:</label>
+                  <div className="flex gap-2 mb-2">
+                    {[1,2,3,4,5].map(num => (
+                      <button
+                        type="button"
+                        key={num}
+                        className={`text-2xl ${reviewRating >= num ? 'text-yellow-500' : 'text-gray-300'}`}
+                        onClick={() => setReviewRating(num)}
+                      >
+                        ★
+                      </button>
+                    ))}
+                  </div>
+                  <label className="font-semibold text-primary">Comment:</label>
+                  <textarea
+                    className="border border-secondary rounded p-2 resize-none min-h-[60px]"
+                    value={reviewComment}
+                    onChange={e => setReviewComment(e.target.value)}
+                    required
+                    maxLength={500}
+                    placeholder="Write your review..."
+                  />
+                  <div className="flex gap-3 mt-2">
+                    <button
+                      type="submit"
+                      className="bg-accent text-white px-4 py-2 rounded hover:bg-accent/80 font-semibold"
+                    >
+                      Submit Review
+                    </button>
+                    <button
+                      type="button"
+                      className="text-accent underline"
+                      onClick={() => setShowReviewForm(false)}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              )}
             </div>
           </>
-        )}
-        {success && (
-          <MessageModal message={success} onClose={() => setSuccess('')} title="Success" type="success" />
         )}
       </div>
     </>
