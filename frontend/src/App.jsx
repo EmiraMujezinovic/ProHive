@@ -14,6 +14,10 @@ import ClientServices from './pages/ClientServices';
 import ClientServiceDetails from './pages/ClientServiceDetails';
 import ClientOrders from './pages/ClientOrders';
 import FreelancerOrders from './pages/FreelancerOrders';
+import ClientProjectsPage from './pages/ClientProjectsPage';
+import AddProjectForm from './pages/AddProjectForm';
+import ClientProjectDetails from './pages/ClientProjectDetails';
+import ClientApplications from './pages/ClientApplications';
 
 function App() {
   return (
@@ -51,6 +55,26 @@ function App() {
         } />
         <Route path="/clientorders" element={<ClientOrders />} />
         <Route path="/freelancerorders" element={<FreelancerOrders />} />
+        <Route path="/myprojects" element={
+          <ProtectedRoute requiredRole="Client">
+            <ClientProjectsPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/addprojectform" element={
+          <ProtectedRoute requiredRole="Client">
+            <AddProjectForm />
+          </ProtectedRoute>
+        } />
+        <Route path="/clientprojectdetails/:id" element={
+          <ProtectedRoute requiredRole="Client">
+            <ClientProjectDetails />
+          </ProtectedRoute>
+        } />
+        <Route path="/applications" element={
+          <ProtectedRoute requiredRole="Client">
+            <ClientApplications />
+          </ProtectedRoute>
+        } />
       </Routes>
     </BrowserRouter>
   );
