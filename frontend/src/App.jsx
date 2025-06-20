@@ -23,6 +23,7 @@ import FreelancerProjects from './pages/FreelancerProjects';
 import FreelancerProjectDetails from './pages/FreelancerProjectDetails';
 import FreelancerApplications from './pages/FreelancerApplications';
 import FreelancerApplicationDetails from './pages/FreelancerApplicationDetails';
+import UserProfile from './pages/UserProfile';
 
 function App() {
   return (
@@ -89,6 +90,7 @@ function App() {
         <Route path="/freelancerproject/:id" element={<FreelancerProjectDetails />} />
         <Route path="/freelancerapplications" element={<FreelancerApplications />} />
         <Route path="/freelancerapplication/:id" element={<FreelancerApplicationDetails />} />
+        <Route path="/profile" element={<UserProfile />} />
       </Routes>
     </BrowserRouter>
   );
