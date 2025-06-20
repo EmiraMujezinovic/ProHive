@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import MessageModal from '../components/MessageModal';
 import ReviewDisplay from '../components/ReviewDisplay';
+import ClientInfoModal from '../components/ClientInfoModal';
 import ratingIcon from '../assets/icons/rating.png';
 import deleteIcon from '../assets/icons/delete.png';
 
@@ -19,6 +20,7 @@ const FreelancerApplicationDetails = () => {
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [reviewRating, setReviewRating] = useState(5);
   const [reviewComment, setReviewComment] = useState('');
+  const [showClientModal, setShowClientModal] = useState(false);
 
   useEffect(() => {
     const fetchDetails = async () => {
@@ -149,18 +151,18 @@ const FreelancerApplicationDetails = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-background px-4 py-8 flex flex-col items-center pt-20">
-        <h1 className="text-3xl font-bold text-primary mb-6">Application Details</h1>
+      <div className="min-h-screen bg-background px-4 py-8 flex flex-col items-center pt-25">
+        <h1 className="text-3xl font-bold text-primary mb-4">Application Details</h1>
         {loading && <div className="text-gray-500">Loading...</div>}
         {error && <MessageModal message={error} onClose={() => setError('')} title="Error" type="error" />}
         {application && project && (
           <>
             {/* Dugmad za akcije - odmah ispod naslova */}
             {project.projectStatus !== 'Finished' && (
-              <div className="flex gap-4 mb-6">
+              <div className="flex gap-4 mb-6 w-full max-w-2xl justify-end">
                 {(project.projectStatus === 'Open' && application.applicationStatusId === 1) && (
                   <button
-                    className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 font-semibold"
+                    className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 font-semibold cursor-pointer"
                     onClick={() => handleStatusAction('withdraw')}
                   >
                     Withdraw
@@ -169,13 +171,13 @@ const FreelancerApplicationDetails = () => {
                 {(project.projectStatus === 'Open' && application.applicationStatusId === 2) && (
                   <>
                     <button
-                      className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 font-semibold"
+                      className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 font-semibold cursor-pointer"
                       onClick={() => handleStatusAction('withdraw')}
                     >
                       Withdraw
                     </button>
                     <button
-                      className="bg-accent text-white px-4 py-2 rounded hover:bg-accent/80 font-semibold"
+                      className="bg-accent text-white px-4 py-2 rounded hover:bg-accent/80 font-semibold cursor-pointer"
                       onClick={() => handleStatusAction('complete')}
                     >
                       Complete
@@ -186,14 +188,17 @@ const FreelancerApplicationDetails = () => {
             )}
             <div className="bg-white rounded-lg shadow-md p-8 w-full max-w-2xl border-secondary border flex flex-col gap-4">
               <div className="text-2xl font-bold text-primary mb-2">{application.projectTitle}</div>
-              <div className="text-text mb-2"><span className="font-semibold text-primary">Status:</span> {application.applicationStatus}</div>
-              <div className="text-text mb-2"><span className="font-semibold text-primary">Proposal:</span> {application.proposal}</div>
-              <div className="text-text mb-2"><span className="font-semibold text-primary">Project Description:</span> {project.description}</div>
-              <div className="text-text mb-2"><span className="font-semibold text-primary">Budget:</span> ${project.budget}</div>
-              <div className="text-text mb-2"><span className="font-semibold text-primary">Deadline:</span> {project.deadline}</div>
-              <div className="text-text mb-2"><span className="font-semibold text-primary">Project Status:</span> {project.projectStatus}</div>
+              <div className="text-text mb-2"><span className="font-semibold text-accent">Status:</span> {application.applicationStatus}</div>
+              <div className="text-text mb-2"><span className="font-semibold text-accent">Proposal:</span> {application.proposal}</div>
+              <div className="text-text mb-2"><span className="font-semibold text-accent">Project Description:</span> {project.description}</div>
+              <div className="text-text mb-2"><span className="font-semibold text-accent">Budget:</span> ${project.budget}</div>
+              <div className="text-text mb-2"><span className="font-semibold text-accent">Deadline:</span> {project.deadline}</div>
+              <div className="text-text mb-2"><span className="font-semibold text-accent">Project Status:</span> {project.projectStatus}</div>
               {client && client.user && client.clientProfile && (
-                <div className="mt-6 p-4 bg-background border border-secondary rounded-lg flex flex-col sm:flex-row gap-4 items-center">
+                <div className="mt-6 p-4 bg-background border border-secondary rounded-lg flex flex-col sm:flex-row gap-4 items-center cursor-pointer hover:shadow-lg transition"
+                  onClick={() => setShowClientModal(true)}
+                  title="View client details"
+                >
                   <img
                     src={client.user.profileImageUrl && client.user.profileImageUrl.startsWith('/profile-images')
                       ? (import.meta.env.VITE_BACKEND_URL || 'https://localhost:7156') + client.user.profileImageUrl
@@ -208,6 +213,9 @@ const FreelancerApplicationDetails = () => {
                     <span className="text-text">Job title: <span className="font-semibold text-primary">{client.clientProfile.jobTitle}</span></span>
                   </div>
                 </div>
+              )}
+              {showClientModal && (
+                <ClientInfoModal clientProfileId={client.clientProfile.clientProfileId} onClose={() => setShowClientModal(false)} />
               )}
               {/* Prikaz review-a */}
               {reviewLoading ? (

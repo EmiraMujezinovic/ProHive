@@ -103,7 +103,7 @@ const Navbar = () => {
         <div className="flex h-16 items-center justify-between relative">
           {/* Logo and brand name on the left */}
           <div className="flex items-center md:gap-4 cursor-pointer">
-            <Link className="flex items-center gap-2" to={role === 'Client' ? '/clientdashboard' : role === 'Freelancer' ? '/freelancerdashboard' : '/'}
+            <Link className="flex items-center gap-2" to={role === 'Client' ? '/clientservices' : role === 'Freelancer' ? '/freelancerprojects' : '/'}
             >
               <img src={logo} alt="ProHive Logo" className="h-13 w-13 object-contain" />
               <div className="text-text text-3xl font-bold tracking-wide select-none" style={{letterSpacing: '0.04em'}}>ProHive</div>

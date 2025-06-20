@@ -47,7 +47,7 @@ const ProjectReviews = ({ projectId }) => {
   if (!reviews.length || (reviews.length === 1 && !reviews[0].reviewId)) return <div className="mt-6 text-gray-500">No reviews for this project.</div>;
 
   return (
-    <div className="mt-8">
+    <div className="mt-2">
       <h2 className="text-xl font-bold text-primary mb-4">Project Reviews</h2>
       <div className="flex flex-col gap-4">
         {reviews.map((review) => (

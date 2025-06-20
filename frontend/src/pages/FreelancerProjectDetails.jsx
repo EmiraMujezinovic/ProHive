@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import MessageModal from '../components/MessageModal';
 import ProjectReviews from '../components/ProjectReviews';
+import ClientInfoModal from '../components/ClientInfoModal';
 
 const FreelancerProjectDetails = () => {
   const { id } = useParams();
@@ -14,6 +15,7 @@ const FreelancerProjectDetails = () => {
   const [proposal, setProposal] = useState('');
   const [applyLoading, setApplyLoading] = useState(false);
   const [success, setSuccess] = useState('');
+  const [showClientModal, setShowClientModal] = useState(false);
 
   useEffect(() => {
     const fetchDetails = async () => {
@@ -71,11 +73,11 @@ const FreelancerProjectDetails = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-background px-4 py-8 flex flex-col items-center pt-20">
-        <h1 className="text-3xl font-bold text-primary mb-6">Project Details</h1>
+      <div className="min-h-screen bg-background px-4 py-8 flex flex-col items-center pt-25">
+        <h1 className="text-3xl font-bold text-primary mb-4">Project Details</h1>
         <div className="w-full max-w-2xl flex flex-row justify-end mb-4">
           <button
-            className="bg-accent text-white px-5 py-2 rounded font-semibold hover:bg-accent/80 transition shadow-md"
+            className="bg-accent text-white px-5 py-2 rounded font-semibold hover:bg-secondary hover:text-text transition shadow-md cursor-pointer"
             onClick={() => setShowApply(true)}
           >
             Apply to Project
@@ -93,12 +95,15 @@ const FreelancerProjectDetails = () => {
             <div className="bg-white rounded-lg shadow-md p-8 w-full max-w-2xl border-secondary border flex flex-col gap-6">
               <div>
                 <div className="text-2xl font-bold text-primary mb-2">{project.title}</div>
-                <div className="text-text mb-2"><span className="font-semibold text-primary">Description:</span> {project.description}</div>
-                <div className="text-text mb-2"><span className="font-semibold text-primary">Budget:</span> ${project.budget}</div>
-                <div className="text-text mb-2"><span className="font-semibold text-primary">Deadline:</span> {project.deadline}</div>
-                <div className="text-text mb-2"><span className="font-semibold text-primary">Status:</span> {project.projectStatus}</div>
+                <div className="text-text mb-2"><span className="font-semibold text-accent">Description:</span> {project.description}</div>
+                <div className="text-text mb-2"><span className="font-semibold text-accent">Budget:</span> ${project.budget}</div>
+                <div className="text-text mb-2"><span className="font-semibold text-accent">Deadline:</span> {project.deadline}</div>
+                <div className="text-text mb-2"><span className="font-semibold text-accent">Status:</span> {project.projectStatus}</div>
                 {client && client.user && client.clientProfile && (
-                  <div className="mt-6 p-4 bg-background border border-secondary rounded-lg flex flex-col sm:flex-row gap-4 items-center">
+                  <div className="mt-6 p-4 bg-background border border-secondary rounded-lg flex flex-col sm:flex-row gap-4 items-center cursor-pointer hover:shadow-lg transition"
+                    onClick={() => setShowClientModal(true)}
+                    title="View client details"
+                  >
                     <img
                       src={client.user.profileImageUrl && client.user.profileImageUrl.startsWith('/profile-images')
                         ? (import.meta.env.VITE_BACKEND_URL || 'https://localhost:7156') + client.user.profileImageUrl
@@ -114,8 +119,11 @@ const FreelancerProjectDetails = () => {
                     </div>
                   </div>
                 )}
+                {showClientModal && (
+                  <ClientInfoModal clientProfileId={client.clientProfile.clientProfileId} onClose={() => setShowClientModal(false)} />
+                )}
               </div>
-              <div className="border-t border-secondary pt-6 mt-2">
+              <div className="border-t border-secondary pt-2">
                 <ProjectReviews projectId={project.projectId} />
               </div>
             </div>

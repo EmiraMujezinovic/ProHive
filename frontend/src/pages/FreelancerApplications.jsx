@@ -54,8 +54,8 @@ const FreelancerApplications = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-background px-4 py-8 flex flex-col items-center pt-20">
-        <h1 className="text-3xl font-bold text-primary mb-6">My Applications</h1>
+      <div className="min-h-screen bg-background px-4 py-8 flex flex-col items-center pt-25">
+        <h1 className="text-3xl font-bold text-primary mb-6">Your Applications</h1>
         {loading && <div className="text-gray-500">Loading...</div>}
         {error && <div className="text-red-500 mb-4">{error}</div>}
         <div className="w-full max-w-3xl flex flex-col gap-4">
@@ -65,14 +65,14 @@ const FreelancerApplications = () => {
           {applications.map(app => (
             <div
               key={app.applicationId}
-              className="bg-white rounded-lg shadow-md p-6 border border-secondary flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 cursor-pointer hover:bg-gray-50 transition"
+              className="bg-white rounded-lg shadow-md p-6 border border-secondary flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 cursor-pointer hover:bg-gray-50 transition hover:scale-102"
               onClick={() => navigate(`/freelancerapplication/${app.applicationId}`)}
             >
               <div>
                 <div className="text-xl font-bold text-primary">{app.projectTitle}</div>
                 <div className="text-text mt-1">Deadline: <span className="font-semibold text-accent">{deadlines[app.applicationId] || '-'}</span></div>
               </div>
-              <div className={`text-sm mt-2 sm:mt-0 font-semibold ${statusColors[app.applicationStatus] || 'text-gray-700'}`}>{app.applicationStatus}</div>
+              <div className={`text-lg mt-2 sm:mt-0 font-semibold ${statusColors[app.applicationStatus] || 'text-gray-700'}`}>{app.applicationStatus}</div>
             </div>
           ))}
         </div>

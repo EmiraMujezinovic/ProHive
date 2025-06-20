@@ -31,9 +31,9 @@ const Login = () => {
       localStorage.setItem('userId', data.userId);
       localStorage.setItem('role', data.role);
       if (data.role === 'Client') {
-        navigate('/clientdashboard');
+        navigate('/clientservices');
       } else if (data.role === 'Freelancer') {
-        navigate('/freelancerdashboard');
+        navigate('/freelancerprojects');
       } else {
         setError('Unknown user role.');
       }
