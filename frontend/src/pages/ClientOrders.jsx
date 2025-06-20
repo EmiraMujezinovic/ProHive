@@ -70,7 +70,7 @@ const ClientOrders = () => {
           {orders.map(order => {
             const review = getReviewForService(order.serviceId);
             return (
-              <div key={order.orderId} onClick={() => setSelectedOrder(order)} className="cursor-pointer">
+              <div key={order.orderId} onClick={() => setSelectedOrder(order)} className="cursor-pointer hover:scale-102 transition-transform">
                 <OrderCard order={order} review={review} />
               </div>
             );

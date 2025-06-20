@@ -121,7 +121,7 @@ const ClientProjectDetails = () => {
         {loading && <div className="text-gray-500">Loading...</div>}
         {project && (
           <>
-            <div className="bg-white rounded-lg shadow-md p-8 w-full max-w-2xl mt-8 border-secondary border relative flex flex-col gap-6">
+            <div className="bg-white rounded-lg shadow-md p-8 w-full max-w-2xl mt-8 border-secondary border relative flex flex-col gap-4">
               <div className="flex items-center justify-between mb-4">
                 <h1 className="text-3xl font-bold text-primary">{project.title}</h1>
                 <div className="flex gap-3">
@@ -133,21 +133,21 @@ const ClientProjectDetails = () => {
                   </button>
                 </div>
               </div>
-              <div className="mb-4 text-lg text-accent font-semibold">
+              <div className="mb-2 text-lg text-accent font-semibold">
                 Budget: <span className="text-text font-normal">${project.budget}</span>
               </div>
-              <div className="mb-4 text-lg text-accent font-semibold">
+              <div className="mb-2 text-lg text-accent font-semibold">
                 Status: <span className="text-text font-normal">{project.projectStatus}</span>
               </div>
-              <div className="mb-5">
+              <div className="mb-2">
                 <span className="font-semibold text-primary">Description:</span>
                 <div className="mt-1 whitespace-pre-line text-text">{project.description}</div>
               </div>
-              <div className="mb-5">
+              <div className="mb-2">
                 <span className="font-semibold text-primary">Deadline:</span>
                 <div className="mt-1 text-text">{project.deadline}</div>
               </div>
-              <div className="border-t border-secondary pt-6 mt-2">
+              <div className="border-t border-secondary pt-3 mt-2">
                 <ProjectReviews projectId={project.projectId} />
               </div>
             </div>
@@ -162,40 +162,40 @@ const ClientProjectDetails = () => {
                     &times;
                   </button>
                   <h2 className="text-xl font-bold text-primary mb-2">Edit Project</h2>
-                  <label className="font-semibold text-primary">Title:</label>
+                  <label className="font-semibold text-text">Title:</label>
                   <input
                     type="text"
                     name="title"
-                    className="border border-secondary rounded p-2"
+                    className="border border-accent rounded p-2 text-text/70"
                     value={editData.title}
                     onChange={handleEditChange}
                     required
                     maxLength={100}
                   />
-                  <label className="font-semibold text-primary">Description:</label>
+                  <label className="font-semibold text-text">Description:</label>
                   <textarea
                     name="description"
-                    className="border border-secondary rounded p-2 resize-none min-h-[80px]"
+                    className="border border-accent rounded text-text/70 p-2 resize-none min-h-[80px]"
                     value={editData.description}
                     onChange={handleEditChange}
                     required
                     maxLength={500}
                   />
-                  <label className="font-semibold text-primary">Budget ($):</label>
+                  <label className="font-semibold text-text">Budget ($):</label>
                   <input
                     type="number"
                     name="budget"
-                    className="border border-secondary rounded p-2"
+                    className="border border-accent text-text/70 rounded p-2"
                     value={editData.budget}
                     onChange={handleEditChange}
                     min={1}
                     required
                   />
-                  <label className="font-semibold text-primary">Deadline:</label>
+                  <label className="font-semibold text-text">Deadline:</label>
                   <input
                     type="date"
                     name="deadline"
-                    className="border border-secondary rounded p-2"
+                    className="border border-accent rounded p-2"
                     value={editData.deadline}
                     onChange={handleEditChange}
                     required
@@ -206,7 +206,7 @@ const ClientProjectDetails = () => {
                   {error && <div className="text-red-500 text-center font-semibold">{error}</div>}
                   <button
                     type="submit"
-                    className="bg-accent text-white px-4 py-2 rounded hover:bg-accent/80 font-semibold mt-2 cursor-pointer"
+                    className="hover:bg-accent hover:text-white px-4 py-2 rounded bg-primary text-text font-semibold mt-2 cursor-pointer"
                     disabled={editLoading}
                   >
                     {editLoading ? 'Saving...' : 'Save Changes'}

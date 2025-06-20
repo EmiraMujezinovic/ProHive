@@ -4,7 +4,7 @@ const ChooseRole = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-background">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-primary via-secondary to-background">
       <div className="bg-white rounded shadow p-8 w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-center text-text">Choose your role</h2>
         <div className="flex flex-col gap-6">

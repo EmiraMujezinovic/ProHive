@@ -153,6 +153,56 @@ const ClientServices = () => {
     }
   };
 
+  // Helper to reload favorites and services after add/remove
+  const reloadFavoritesAndServices = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      let userId = null;
+      if (token) {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        userId = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"] || payload.userId || payload.id;
+      }
+      if (!userId) return;
+      // Reload favorites
+      const favRes = await fetch(`/api/Services/favorites/${userId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      let favIds = [];
+      if (favRes.ok) {
+        const favData = await favRes.json();
+        favIds = favData.map(fav => fav.ServiceId || fav.serviceId);
+      }
+      setFavoriteIds(favIds);
+      // Reload services (to update favorite icons)
+      let servicesRes;
+      if (searchValue) {
+        servicesRes = await fetch(`/api/Services/search/title?title=${encodeURIComponent(searchValue)}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+      } else if (activeCategoryId) {
+        servicesRes = await fetch(`/api/Services/search/category?categoryId=${activeCategoryId}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+      } else {
+        servicesRes = await fetch('/api/Services/all', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+      }
+      if (servicesRes && servicesRes.ok) {
+        const servicesData = await servicesRes.json();
+        setServices(servicesData);
+      }
+    } catch {
+      // fallback: do nothing
+    }
+  };
+
+  // Always reload favorites and services when toggling favorites view
+  useEffect(() => {
+    reloadFavoritesAndServices();
+    // eslint-disable-next-line
+  }, [showFavoritesOnly]);
+
   // Filtered services for grid
   const filteredServices = showFavoritesOnly
     ? services.filter(s => favoriteIds.includes(s.ServiceId || s.serviceId))
@@ -180,6 +230,7 @@ const ClientServices = () => {
           <ClientServicesGridWithFavorites
             services={filteredServices}
             onServiceClick={serviceId => window.location.href = `/clientservicedetails/${serviceId}`}
+            onFavoriteChange={reloadFavoritesAndServices}
           />
         </div>
       </div>

@@ -19,7 +19,6 @@ const UserProfile = () => {
             headers: { Authorization: `Bearer ${token}` }
           });
         } else if (role === 'Client') {
-          // You may need to fetch clientProfileId first if not in localStorage
           let clientProfileId = localStorage.getItem('clientProfileId');
           if (!clientProfileId) {
             // Try to get it from user info endpoint if needed
@@ -27,8 +26,10 @@ const UserProfile = () => {
             if (userRes.ok) {
               const userJson = await userRes.json();
               clientProfileId = userJson.clientProfileId;
+              if (clientProfileId) localStorage.setItem('clientProfileId', clientProfileId);
             }
           }
+          if (!clientProfileId) throw new Error('Client profile not found.');
           response = await fetch(`/api/Users/client-profile/${clientProfileId}`, {
             headers: { Authorization: `Bearer ${token}` }
           });

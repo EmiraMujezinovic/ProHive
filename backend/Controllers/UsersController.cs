@@ -28,7 +28,17 @@ namespace backend.Controllers
             if (user == null)
                 return NotFound();
 
-            // Return basic user info including profile image url
+            // Prona?i clientProfileId i freelancerProfileId (ili null ako ne postoji)
+            var clientProfileId = await _context.ClientProfiles
+                .Where(cp => cp.UserId == id)
+                .Select(cp => (int?)cp.ClientProfileId)
+                .FirstOrDefaultAsync();
+            var freelancerProfileId = await _context.FreelancerProfiles
+                .Where(fp => fp.UserId == id)
+                .Select(fp => (int?)fp.FreelancerProfileId)
+                .FirstOrDefaultAsync();
+
+            // Return basic user info including profile image url, clientProfileId, freelancerProfileId
             return Ok(new
             {
                 user.UserId,
@@ -37,7 +47,9 @@ namespace backend.Controllers
                 user.FullName,
                 user.PhoneNumber,
                 user.ProfileImageUrl,
-                user.RoleId
+                user.RoleId,
+                clientProfileId,
+                freelancerProfileId
             });
         }
 

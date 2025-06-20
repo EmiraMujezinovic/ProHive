@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import MessageModal from '../components/MessageModal';
+import FreelancerInfoModal from '../components/FreelancerInfoModal';
 
 const statusMap = {
   1: 'Pending',
@@ -18,6 +19,7 @@ const ClientApplicationDetails = () => {
   const [freelancer, setFreelancer] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [showFreelancerModal, setShowFreelancerModal] = useState(false);
 
   useEffect(() => {
     const fetchApplication = async () => {
@@ -89,32 +91,31 @@ const ClientApplicationDetails = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-background px-4 py-8 flex flex-col items-center pt-25">
+      <div className="min-h-screen bg-background px-4 py-8 flex flex-col items-center pt-27">
         <h1 className="text-3xl font-bold text-primary mb-6">Application Details</h1>
         {loading && <div className="text-gray-500">Loading...</div>}
-        {/* Uklonjen prikaz greske iznad i u detaljima projekta, greske su samo u modalu */}
         {application && (
           <div className="bg-white rounded-lg shadow-md p-8 w-full max-w-2xl border-secondary border flex flex-col gap-4">
-            <div>
+            <div className='text-xl'>
               <span className="font-semibold text-primary">Project:</span> <span className="text-text font-bold">{application.projectTitle}</span>
             </div>
-            <div>
+            <div className='text-xl'>
               <span className="font-semibold text-primary">Proposal:</span> <span className="text-text">{application.proposal}</span>
             </div>
-            <div>
+            <div className='text-xl'>
               <span className="font-semibold text-primary">Status:</span> <span className="text-accent font-bold">{statusMap[application.applicationStatusId] || 'Unknown'}</span>
             </div>
             {/* Dugmad za akcije u zavisnosti od statusa */}
             {application.applicationStatusId === 1 && (
               <div className="flex gap-4 mt-4">
                 <button
-                  className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 font-semibold"
+                  className="bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700 font-semibold cursor-pointer hover:scale-101 transition"
                   onClick={() => handleStatusAction('accept')}
                 >
                   Accept
                 </button>
                 <button
-                  className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 font-semibold"
+                  className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600 font-semibold cursor-pointer hover:scale-101 transition"
                   onClick={() => handleStatusAction('reject')}
                 >
                   Reject
@@ -138,7 +139,10 @@ const ClientApplicationDetails = () => {
               </div>
             )}
             {freelancer && (
-              <div className="mt-4 p-4 bg-background border border-secondary rounded-lg flex flex-col sm:flex-row gap-4 items-center">
+              <div className="mt-4 p-4 bg-background border border-secondary rounded-lg flex flex-col sm:flex-row gap-4 items-center cursor-pointer hover:shadow-lg transition"
+                onClick={() => setShowFreelancerModal(true)}
+                title="View freelancer details"
+              >
                 <img
                   src={freelancer.user?.profileImageUrl && freelancer.user.profileImageUrl.startsWith('/profile-images')
                     ? (import.meta.env.VITE_BACKEND_URL || 'https://localhost:7156') + freelancer.user.profileImageUrl
@@ -153,6 +157,9 @@ const ClientApplicationDetails = () => {
                   <span className="text-text">Experience: <span className="font-semibold text-primary">{freelancer.freelancerProfile?.experianceLevel}</span></span>
                 </div>
               </div>
+            )}
+            {showFreelancerModal && (
+              <FreelancerInfoModal userId={freelancer.user.userId} onClose={() => setShowFreelancerModal(false)} />
             )}
           </div>
         )}

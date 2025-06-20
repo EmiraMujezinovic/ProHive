@@ -156,14 +156,14 @@ const Navbar = () => {
                   style={{ minWidth: '12rem', maxWidth: '90vw' }}
                 >
                   <button
-                    className="flex items-center gap-3 px-4 py-2 hover:bg-secondary/20 text-primary font-semibold transition text-left"
+                    className="flex items-center gap-3 px-4 py-2 hover:bg-secondary/20 text-primary font-semibold transition text-left cursor-pointer"
                     onClick={handleViewProfile}
                   >
                     <img src={viewProfileIcon} alt="View profile" className="w-5 h-5" />
                     View profile
                   </button>
                   <button
-                    className="flex items-center gap-3 px-4 py-2 hover:bg-secondary/20 text-red-600 font-semibold transition text-left"
+                    className="flex items-center gap-3 px-4 py-2 hover:bg-secondary/20 text-red-600 font-semibold transition text-left cursor-pointer"
                     onClick={handleLogout}
                   >
                     <img src={logoutIcon} alt="Log out" className="w-5 h-5" />
