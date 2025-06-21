@@ -65,11 +65,11 @@ const Login = () => {
           onChange={e => setPassword(e.target.value)}
           required
         />
-        <button type="submit" className="w-full bg-primary text-text py-2 rounded font-semibold hover:bg-secondary transition mb-2 cursor-pointer hover:scale-101">Login</button>
+        <button type="submit" className="w-full bg-primary text-text py-2 rounded font-semibold hover:bg-accent hover:text-white transition mb-2 cursor-pointer hover:scale-103">Login</button>
         <div className="text-center mt-4">
           <button
             type="button"
-            className="text-primary hover:underline hover:text-accent bg-transparent border-none p-0 cursor-pointer"
+            className="text-primary hover:underline hover:text-accent hover:scale-103 transition bg-transparent border-none p-0 cursor-pointer"
             onClick={() => navigate('/chooserole')}
           >
             Don't have an account? Sign up

@@ -24,6 +24,7 @@ import FreelancerProjectDetails from './pages/FreelancerProjectDetails';
 import FreelancerApplications from './pages/FreelancerApplications';
 import FreelancerApplicationDetails from './pages/FreelancerApplicationDetails';
 import UserProfile from './pages/UserProfile';
+import RecommendedServices from './pages/RecommendedServices';
 
 function App() {
   return (
@@ -91,6 +92,11 @@ function App() {
         <Route path="/freelancerapplications" element={<FreelancerApplications />} />
         <Route path="/freelancerapplication/:id" element={<FreelancerApplicationDetails />} />
         <Route path="/profile" element={<UserProfile />} />
+        <Route path="/recommended" element={
+          <ProtectedRoute requiredRole="Client">
+            <RecommendedServices />
+          </ProtectedRoute>
+        } />
       </Routes>
     </BrowserRouter>
   );
