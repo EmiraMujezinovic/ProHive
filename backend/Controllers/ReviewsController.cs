@@ -146,7 +146,8 @@ namespace backend.Controllers
                 return Ok(new { averageRating = 0 });
 
             var average = ratings.Average() ?? 0;
-            return Ok(new { averageRating = average });
+            var rounded = Math.Round(average, 1);
+            return Ok(new { averageRating = rounded });
         }
 
         // GET: api/Reviews/average-rating/reviewee/{revieweeId}
@@ -164,11 +165,12 @@ namespace backend.Controllers
                 return Ok(new { averageRating = 0 });
 
             var average = ratings.Average() ?? 0;
-            return Ok(new { averageRating = average });
+            var rounded = Math.Round(average, 1);
+            return Ok(new { averageRating = rounded });
         }
 
         // GET: api/Reviews/by-project/{projectId}
-        // Omogu?ava prijavljenom korisniku da dobavi svoj review za dati projekat
+        // Omogucava prijavljenom korisniku da dobavi svoj review za dati projekat
         [HttpGet("by-project/{projectId}")]
         [Authorize]
         public async Task<IActionResult> GetMyReviewByProjectId(int projectId)
@@ -197,7 +199,7 @@ namespace backend.Controllers
         }
 
         // GET: api/Reviews/all-by-project/{projectId}
-        // Omogu?ava prijavljenom korisniku da dobije sve reviews za dati projekat
+        // Omogucava prijavljenom korisniku da dobije sve reviews za dati projekat
         [HttpGet("all-by-project/{projectId}")]
         [Authorize]
         public async Task<IActionResult> GetAllReviewsByProjectId(int projectId)

@@ -53,7 +53,7 @@ const ClientInfoModal = ({ clientProfileId, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-      <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-lg w-full relative border-2 border-accent">
+      <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-lg w-full relative border-2 border-accent overflow-y-auto max-h-[90vh] min-h-[350px]">
         <button onClick={onClose} className="absolute top-3 right-3 text-accent text-3xl font-bold cursor-pointer">&times;</button>
         {loading ? (
           <div className="text-center text-gray-500">Loading client info...</div>

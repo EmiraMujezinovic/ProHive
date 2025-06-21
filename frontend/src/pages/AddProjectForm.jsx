@@ -55,36 +55,36 @@ const AddProjectForm = () => {
       <div className="min-h-screen bg-background px-4 py-8 flex flex-col items-center pt-25">
         <h1 className="text-3xl font-bold text-primary mb-6">Add New Project</h1>
         <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-8 w-full max-w-lg flex flex-col gap-4 border border-secondary">
-          <label className="font-semibold text-primary">Title:</label>
+          <label className="font-semibold text-text">Title:</label>
           <input
             type="text"
-            className="border border-secondary rounded p-2"
+            className="border border-accent rounded p-2"
             value={title}
             onChange={e => setTitle(e.target.value)}
             required
             maxLength={100}
           />
-          <label className="font-semibold text-primary">Description:</label>
+          <label className="font-semibold text-text">Description:</label>
           <textarea
-            className="border border-secondary rounded p-2 resize-none min-h-[80px]"
+            className="border border-accent rounded p-2 resize-none min-h-[80px]"
             value={description}
             onChange={e => setDescription(e.target.value)}
             required
             maxLength={500}
           />
-          <label className="font-semibold text-primary">Budget ($):</label>
+          <label className="font-semibold text-text">Budget ($):</label>
           <input
             type="number"
-            className="border border-secondary rounded p-2"
+            className="border border-accent rounded p-2"
             value={budget}
             onChange={e => setBudget(e.target.value)}
             min={1}
             required
           />
-          <label className="font-semibold text-primary">Deadline:</label>
+          <label className="font-semibold text-text">Deadline:</label>
           <input
             type="date"
-            className="border border-secondary rounded p-2"
+            className="border border-accent rounded p-2"
             value={deadline}
             onChange={e => setDeadline(e.target.value)}
             required
@@ -94,14 +94,14 @@ const AddProjectForm = () => {
           {success && <div className="text-green-600 text-center font-semibold">{success}</div>}
           <button
             type="submit"
-            className="bg-accent text-white px-4 py-2 rounded hover:bg-accent/80 font-semibold mt-2 cursor-pointer"
+            className="bg-accent text-white px-4 py-2 rounded hover:bg-primary hover:text-text hover:scale-101 transition font-semibold mt-2 cursor-pointer"
             disabled={loading}
           >
             {loading ? 'Creating...' : 'Create Project'}
           </button>
           <button
             type="button"
-            className="text-accent underline mt-1 cursor-pointer"
+            className="text-accent hover:text-primary hover:scale-102 underline mt-1 cursor-pointer"
             onClick={() => navigate('/myprojects')}
             disabled={loading}
           >

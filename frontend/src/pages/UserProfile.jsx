@@ -55,10 +55,10 @@ const UserProfile = () => {
   const profile = freelancerProfile || clientProfile;
 
   return (
-    <div className="min-h-screen bg-background pt-30">
+    <div>
       <Navbar />
-      <div className="max-w-xl p-8 mx-auto bg-white/90 rounded-2xl shadow-2xl border-2 border-accent/40">
-        <div className="flex flex-col items-center gap-4">
+      <div className="fixed inset-0 z-40 bg-background flex items-center justify-center pt-20">
+        <div className="relative z-50 max-w-xl w-full p-8 bg-white/90 rounded-2xl shadow-2xl border-2 border-accent/40 flex flex-col items-center gap-4">
           <img
             src={user?.profileImageUrl?.startsWith('/profile-images') ? (import.meta.env.VITE_BACKEND_URL || 'https://localhost:7156') + user.profileImageUrl : user?.profileImageUrl || '/defaultprofile.jpg'}
             alt="Profile"
