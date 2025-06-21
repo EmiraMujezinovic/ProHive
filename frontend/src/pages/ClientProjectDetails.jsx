@@ -117,11 +117,11 @@ const ClientProjectDetails = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-background px-4 py-8 flex flex-col items-center pt-20">
+      <div className="min-h-screen bg-gradient-to-br from-background via-secondary to-background px-4 py-8 flex flex-col items-center pt-20">
         {loading && <div className="text-gray-500">Loading...</div>}
         {project && (
           <>
-            <div className="bg-white rounded-lg shadow-md p-8 w-full max-w-2xl mt-8 border-secondary border relative flex flex-col gap-4">
+            <div className="bg-background rounded-lg shadow-md p-8 w-full max-w-2xl mt-8 border-secondary border relative flex flex-col gap-4">
               <div className="flex items-center justify-between mb-4">
                 <h1 className="text-3xl font-bold text-primary">{project.title}</h1>
                 <div className="flex gap-3">
@@ -140,11 +140,11 @@ const ClientProjectDetails = () => {
                 Status: <span className="text-text font-normal">{project.projectStatus}</span>
               </div>
               <div className="mb-2">
-                <span className="font-semibold text-primary">Description:</span>
+                <span className="font-semibold text-accent">Description:</span>
                 <div className="mt-1 whitespace-pre-line text-text">{project.description}</div>
               </div>
               <div className="mb-2">
-                <span className="font-semibold text-primary">Deadline:</span>
+                <span className="font-semibold text-accent">Deadline:</span>
                 <div className="mt-1 text-text">{project.deadline}</div>
               </div>
               <div className="border-t border-secondary pt-3 mt-2">

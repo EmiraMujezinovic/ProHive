@@ -53,7 +53,7 @@ const ProjectReviews = ({ projectId }) => {
         {reviews.map((review) => (
           <div key={review.reviewId} className="bg-background border border-accent rounded-lg p-4 flex flex-col gap-2">
             <div className="flex items-center gap-2">
-              <span className="font-semibold text-primary">{reviewers[review.reviewerId] || 'User'}:</span>
+              <span className="font-semibold text-text">{reviewers[review.reviewerId] || 'User'}:</span>
               <span className="flex items-center gap-1">
                 {Array.from({ length: review.rating }).map((_, i) => (
                   <img key={i} src={ratingIcon} alt="star" className="w-5 h-5 inline-block" />

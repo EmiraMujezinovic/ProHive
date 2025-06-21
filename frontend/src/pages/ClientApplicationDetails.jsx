@@ -91,8 +91,8 @@ const ClientApplicationDetails = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-background px-4 py-8 flex flex-col items-center pt-27">
-        <h1 className="text-3xl font-bold text-primary mb-6">Application Details</h1>
+      <div className="min-h-screen bg-gradient-to-br from-background via-secondary to-background px-4 py-8 flex flex-col items-center pt-27">
+        <h1 className="text-3xl font-bold text-accent mb-6">Application Details</h1>
         {loading && <div className="text-gray-500">Loading...</div>}
         {application && (
           <div className="bg-white rounded-lg shadow-md p-8 w-full max-w-2xl border-secondary border flex flex-col gap-4">

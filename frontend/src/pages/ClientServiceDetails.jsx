@@ -107,7 +107,7 @@ const ClientServiceDetails = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-background px-4 py-8 flex flex-col items-center pt-30">
+      <div className="min-h-screen bg-gradient-to-br from-background via-secondary to-background px-4 py-8 flex flex-col items-center pt-30">
         {loading && <div className="text-gray-500">Loading...</div>}
         {error && <div className="text-red-500 mb-4">{error}</div>}
         {service && (

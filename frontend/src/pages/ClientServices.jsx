@@ -211,8 +211,8 @@ const ClientServices = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-background pt-25 px-6 py-8 flex flex-col items-center">
-        <h1 className="text-3xl font-bold text-primary mb-8 text-center">Browse Services</h1>
+      <div className="min-h-screen bg-gradient-to-br from-background via-secondary to-background pt-27 px-6 py-8 flex flex-col items-center">
+        <h1 className="text-3xl font-bold text-accent mb-6 text-center">Browse Services</h1>
         <ServicesSearchBar
           onViewFavoritesToggle={setShowFavoritesOnly}
           showFavoritesOnly={showFavoritesOnly}

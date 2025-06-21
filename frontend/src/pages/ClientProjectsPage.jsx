@@ -29,7 +29,7 @@ const ClientProjectsPage = () => {
     <>
       <Navbar />
       <div className="min-h-screen bg-background px-4 py-8 flex flex-col items-center pt-28">
-        <h1 className="text-3xl font-bold text-primary mb-3">Your Projects</h1>
+        <h1 className="text-3xl font-bold text-accent mb-3">Your Projects</h1>
         {loading && <div className="text-gray-500">Loading...</div>}
         {error && <div className="text-red-500 mb-4">{error}</div>}
         <div className="flex flex-col sm:flex-row items-center justify-between mb-4 w-full max-w-3xl">
@@ -48,13 +48,13 @@ const ClientProjectsPage = () => {
           {projects.map(project => (
             <div
               key={project.projectId}
-              className="bg-white rounded-lg shadow-md p-5 border border-secondary flex flex-col gap-2 cursor-pointer hover:bg-accent/5 transition hover:scale-102"
+              className="bg-secondary/70 rounded-lg shadow-md p-5 border border-secondary flex flex-col gap-2 cursor-pointer hover:bg-accent/5 transition hover:scale-102"
               onClick={() => window.location.href = `/clientprojectdetails/${project.projectId}`}
             >
-              <span className="text-xl font-bold text-primary">{project.title}</span>
+              <span className="text-xl font-bold text-text">{project.title}</span>
               <div className="flex flex-row gap-6 items-center">
-                <span className="text-accent font-semibold"><span className='text-text'>Budget:</span> ${project.budget}</span>
-                <span className="text-text font-semibold">Status: <span className="text-accent">{project.projectStatus}</span></span>
+                <span className="text-green-600 font-semibold"><span className='text-text'>Budget:</span> ${project.budget}</span>
+                <span className="text-text font-semibold">Status: <span className="text-green-600">{project.projectStatus}</span></span>
               </div>
             </div>
           ))}

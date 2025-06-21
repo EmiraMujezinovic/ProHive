@@ -54,21 +54,21 @@ const ClientApplications = () => {
     <>
       <Navbar />
       <div className="min-h-screen bg-background px-4 py-8 flex flex-col items-center pt-27">
-        <h1 className="text-3xl font-bold text-primary mb-7">Project Applications</h1>
+        <h1 className="text-3xl font-bold text-accent mb-10">Project Applications</h1>
         {loading && <div className="text-gray-500">Loading...</div>}
         {error && <div className="text-red-500 mb-4">{error}</div>}
-        <div className="w-full max-w-3xl flex flex-col gap-5">
+        <div className="w-full max-w-6xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {applications.length === 0 && !loading && !error && (
-            <div className="text-gray-400 text-center">No applications found.</div>
+            <div className="text-gray-400 text-center col-span-full">No applications found.</div>
           )}
           {applications.map(app => (
             <div
               key={app.applicationId}
-              className="bg-white rounded-lg shadow-md p-5 border border-secondary flex flex-col gap-2 cursor-pointer hover:bg-accent/5 transition hover:scale-102"
+              className="bg-secondary/70 rounded-lg shadow-md p-5 border border-secondary flex flex-col gap-2 cursor-pointer hover:bg-accent/5 transition hover:scale-102"
               onClick={() => window.location.href = `/clientapplicationdetails/${app.applicationId}`}
             >
-              <span className="text-xl font-bold text-primary">{app.projectTitle}</span>
-              <div className="flex flex-row gap-6 items-center">
+              <span className="text-xl font-bold text-text">{app.projectTitle}</span>
+              <div className="flex flex-row gap-6 items-center flex-wrap">
                 <span className="text-accent font-semibold"><span className='text-text'>Deadline:</span> {projectDeadlines[app.projectId] ? new Date(projectDeadlines[app.projectId]).toLocaleDateString() : 'Loading...'}</span>
                 <span className="text-text font-semibold">Status: <span className="text-accent">{statusMap[app.applicationStatusId] || 'Unknown'}</span></span>
               </div>

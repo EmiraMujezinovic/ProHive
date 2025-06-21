@@ -59,8 +59,8 @@ const ClientOrders = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-background px-4 py-8 flex flex-col items-center pt-25">
-        <h1 className="text-3xl font-bold text-primary mb-6">Your Orders</h1>
+      <div className="min-h-screen bg-background px-4 py-8 flex flex-col items-center pt-27">
+        <h1 className="text-3xl font-bold text-accent mb-10">Your Orders</h1>
         {loading && <div className="text-gray-500">Loading...</div>}
         {error && <div className="text-red-500 mb-4">{error}</div>}
         <div className="w-full max-w-3xl flex flex-col gap-5">
