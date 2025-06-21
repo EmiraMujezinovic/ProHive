@@ -1,4 +1,4 @@
-using Backend; // zbog ServiceRecommendationModel
+using Backend; // zbog ServiceRecommendationModel i ProjectRecommendationModel
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +19,7 @@ namespace backend.Controllers
         }
 
         // GET: api/recommendations/services
-        // Vra?a preporu?ene servise za prijavljenog klijenta
+        // Vraca preporucene servise za prijavljenog klijenta
         [HttpGet("services")]
         [Authorize(Roles = "Client")]
         public async Task<IActionResult> GetRecommendedServicesForClient()
@@ -46,7 +46,7 @@ namespace backend.Controllers
             var predictions = new List<(Service service, float score)>();
             foreach (var service in services)
             {
-                // (Opcionalno) Presko?i servise koje je korisnik ve? ocijenio
+                // (Opcionalno) Preskoci servise koje je korisnik ve? ocijenio
                 if (ratedServiceIds.Contains(service.ServiceId))
                     continue;
 
@@ -88,6 +88,72 @@ namespace backend.Controllers
                 .ToList();
 
             return Ok(topServices);
+        }
+
+        // GET: api/recommendations/projects
+        // Returns recommended projects for the logged-in freelancer
+        [HttpGet("projects")]
+        [Authorize(Roles = "Freelancer")]
+        public async Task<IActionResult> GetRecommendedProjectsForFreelancer()
+        {
+            // Get userId from JWT token
+            var userIdStr = User.FindFirstValue(System.Security.Claims.ClaimTypes.NameIdentifier);
+            if (!int.TryParse(userIdStr, out int userId))
+                return Unauthorized();
+
+            // Get all projects from the database
+            var projects = await _context.Projects
+                .Include(p => p.ClientProfile).ThenInclude(cp => cp.User)
+                .ToListAsync();
+
+            // (Optional) Get projects already reviewed by this freelancer
+            var reviewedProjectIds = await _context.Reviews
+                .Where(r => r.ReviewerId == userId && r.ProjectId != null)
+                .Select(r => r.ProjectId.Value)
+                .ToListAsync();
+
+            // Prepare prediction list
+            var predictions = new List<(Project project, float score)>();
+            foreach (var project in projects)
+            {
+                // Skip projects already reviewed by this freelancer
+                if (reviewedProjectIds.Contains(project.ProjectId))
+                    continue;
+
+                var input = new ProjectRecommendationModel.ModelInput
+                {
+                    UserId = userId,
+                    ProjectId = project.ProjectId,
+                    Rating = 0 // Rating is not needed for prediction
+                };
+                var output = ProjectRecommendationModel.Predict(input);
+                predictions.Add((project, output.Score));
+            }
+
+            // Sort by score and take top 10
+            var topProjects = predictions
+                .OrderByDescending(p => p.score)
+                .Take(10)
+                .Select(p => new
+                {
+                    p.project.ProjectId,
+                    p.project.Title,
+                    p.project.Description,
+                    p.project.Budget,
+                    p.project.ProjectStatus,
+                    Client = p.project.ClientProfile != null ? new
+                    {
+                        p.project.ClientProfile.ClientProfileId,
+                        p.project.ClientProfile.UserId,
+                        p.project.ClientProfile.User?.Username,
+                        p.project.ClientProfile.User?.FullName,
+                        p.project.ClientProfile.User?.ProfileImageUrl
+                    } : null,
+                    RecommendationScore = p.score
+                })
+                .ToList();
+
+            return Ok(topProjects);
         }
     }
 }

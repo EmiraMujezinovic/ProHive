@@ -1,0 +1,263 @@
+﻿{
+  "Scenario": "Recommendation",
+  "DataSource": {
+    "Version": 3,
+    "EscapeCharacter": "\"",
+    "ReadMultiLines": false,
+    "KeepDiacritics": false,
+    "KeepPunctuations": false,
+    "AllowQuoting": false,
+    "Type": "TabularFile",
+    "FilePath": "C:\\Users\\User\\Desktop\\ProHive\\backend\\project_ratings.csv",
+    "Delimiter": ",",
+    "DecimalMarker": ".",
+    "HasHeader": true,
+    "ColumnProperties": [
+      {
+        "ColumnName": "UserId",
+        "ColumnPurpose": "User",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": false,
+        "Type": "Column",
+        "Version": 5
+      },
+      {
+        "ColumnName": "ProjectId",
+        "ColumnPurpose": "Item",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": false,
+        "Type": "Column",
+        "Version": 5
+      },
+      {
+        "ColumnName": "Rating",
+        "ColumnPurpose": "Label",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": true,
+        "Type": "Column",
+        "Version": 5
+      }
+    ]
+  },
+  "Environment": {
+    "Type": "LocalCPU",
+    "Version": 1
+  },
+  "RunHistory": {
+    "Version": 3,
+    "Type": "Result",
+    "Trials": [
+      {
+        "Version": 1,
+        "Type": "Trial",
+        "TrainerName": "MatrixFactorization",
+        "Score": -1.5364486166404823,
+        "RuntimeInSeconds": 0.444,
+        "Parameter": {
+          "_SCHEMA_": "e0 * e1 * e2 * e3 * e4",
+          "e0": {
+            "OutputColumnName": "ProjectId",
+            "InputColumnName": "ProjectId",
+            "AddKeyValueAnnotationsAsText": false
+          },
+          "e1": {
+            "OutputColumnName": "UserId",
+            "InputColumnName": "UserId",
+            "AddKeyValueAnnotationsAsText": false
+          },
+          "e2": {
+            "LabelColumnName": "Rating",
+            "MatrixColumnIndexColumnName": "UserId",
+            "MatrixRowIndexColumnName": "ProjectId",
+            "ApproximationRank": 14,
+            "LearningRate": 0.41031181960112828,
+            "NumberOfIterations": 94,
+            "Quiet": true
+          },
+          "e3": {
+            "OutputColumnName": "UserId",
+            "InputColumnName": "UserId"
+          },
+          "e4": {
+            "OutputColumnName": "ProjectId",
+            "InputColumnName": "ProjectId"
+          }
+        }
+      },
+      {
+        "Version": 1,
+        "Type": "Trial",
+        "TrainerName": "MatrixFactorization",
+        "Score": -1.5484271205112783,
+        "RuntimeInSeconds": 0.428,
+        "Parameter": {
+          "_SCHEMA_": "e0 * e1 * e2 * e3 * e4",
+          "e0": {
+            "OutputColumnName": "ProjectId",
+            "InputColumnName": "ProjectId",
+            "AddKeyValueAnnotationsAsText": false
+          },
+          "e1": {
+            "OutputColumnName": "UserId",
+            "InputColumnName": "UserId",
+            "AddKeyValueAnnotationsAsText": false
+          },
+          "e2": {
+            "LabelColumnName": "Rating",
+            "MatrixColumnIndexColumnName": "UserId",
+            "MatrixRowIndexColumnName": "ProjectId",
+            "ApproximationRank": 14,
+            "LearningRate": 0.41131647414517608,
+            "NumberOfIterations": 94,
+            "Quiet": true
+          },
+          "e3": {
+            "OutputColumnName": "UserId",
+            "InputColumnName": "UserId"
+          },
+          "e4": {
+            "OutputColumnName": "ProjectId",
+            "InputColumnName": "ProjectId"
+          }
+        }
+      },
+      {
+        "Version": 1,
+        "Type": "Trial",
+        "TrainerName": "MatrixFactorization",
+        "Score": -1.5509098516324804,
+        "RuntimeInSeconds": 0.309,
+        "Parameter": {
+          "_SCHEMA_": "e0 * e1 * e2 * e3 * e4",
+          "e0": {
+            "OutputColumnName": "ProjectId",
+            "InputColumnName": "ProjectId",
+            "AddKeyValueAnnotationsAsText": false
+          },
+          "e1": {
+            "OutputColumnName": "UserId",
+            "InputColumnName": "UserId",
+            "AddKeyValueAnnotationsAsText": false
+          },
+          "e2": {
+            "LabelColumnName": "Rating",
+            "MatrixColumnIndexColumnName": "UserId",
+            "MatrixRowIndexColumnName": "ProjectId",
+            "ApproximationRank": 10,
+            "LearningRate": 0.26604507852513887,
+            "NumberOfIterations": 60,
+            "Quiet": true
+          },
+          "e3": {
+            "OutputColumnName": "UserId",
+            "InputColumnName": "UserId"
+          },
+          "e4": {
+            "OutputColumnName": "ProjectId",
+            "InputColumnName": "ProjectId"
+          }
+        }
+      },
+      {
+        "Version": 1,
+        "Type": "Trial",
+        "TrainerName": "MatrixFactorization",
+        "Score": -1.5516361843798645,
+        "RuntimeInSeconds": 0.438,
+        "Parameter": {
+          "_SCHEMA_": "e0 * e1 * e2 * e3 * e4",
+          "e0": {
+            "OutputColumnName": "ProjectId",
+            "InputColumnName": "ProjectId",
+            "AddKeyValueAnnotationsAsText": false
+          },
+          "e1": {
+            "OutputColumnName": "UserId",
+            "InputColumnName": "UserId",
+            "AddKeyValueAnnotationsAsText": false
+          },
+          "e2": {
+            "LabelColumnName": "Rating",
+            "MatrixColumnIndexColumnName": "UserId",
+            "MatrixRowIndexColumnName": "ProjectId",
+            "ApproximationRank": 14,
+            "LearningRate": 0.40924568811440337,
+            "NumberOfIterations": 94,
+            "Quiet": true
+          },
+          "e3": {
+            "OutputColumnName": "UserId",
+            "InputColumnName": "UserId"
+          },
+          "e4": {
+            "OutputColumnName": "ProjectId",
+            "InputColumnName": "ProjectId"
+          }
+        }
+      },
+      {
+        "Version": 1,
+        "Type": "Trial",
+        "TrainerName": "MatrixFactorization",
+        "Score": -1.5653223120120494,
+        "RuntimeInSeconds": 0.444,
+        "Parameter": {
+          "_SCHEMA_": "e0 * e1 * e2 * e3 * e4",
+          "e0": {
+            "OutputColumnName": "ProjectId",
+            "InputColumnName": "ProjectId",
+            "AddKeyValueAnnotationsAsText": false
+          },
+          "e1": {
+            "OutputColumnName": "UserId",
+            "InputColumnName": "UserId",
+            "AddKeyValueAnnotationsAsText": false
+          },
+          "e2": {
+            "LabelColumnName": "Rating",
+            "MatrixColumnIndexColumnName": "UserId",
+            "MatrixRowIndexColumnName": "ProjectId",
+            "ApproximationRank": 14,
+            "LearningRate": 0.3987427258535019,
+            "NumberOfIterations": 94,
+            "Quiet": true
+          },
+          "e3": {
+            "OutputColumnName": "UserId",
+            "InputColumnName": "UserId"
+          },
+          "e4": {
+            "OutputColumnName": "ProjectId",
+            "InputColumnName": "ProjectId"
+          }
+        }
+      }
+    ],
+    "Estimators": {
+      "e0": "MapValueToKey",
+      "e1": "MapValueToKey",
+      "e2": "MatrixFactorization",
+      "e3": "MapKeyToValue",
+      "e4": "MapKeyToValue"
+    },
+    "Schema": "e0 * e1 * e2 * e3 * e4",
+    "MetricName": "RSquared",
+    "ModelFilePath": "C:\\Users\\User\\Desktop\\ProHive\\backend\\ProjectRecommendationModel.mlnet"
+  },
+  "Type": "TrainingConfig",
+  "Version": 5,
+  "TrainingOption": {
+    "Version": 2,
+    "Subsampling": false,
+    "Type": "RecommendationTrainingOption",
+    "TrainingTime": 30,
+    "LabelColumn": "Rating",
+    "UserIdColumn": "UserId",
+    "ItemIdColumn": "ProjectId",
+    "ValidationOption": {
+      "Version": 0,
+      "Type": "CrossValidationValidationOption",
+      "NumberOfFolds": 5
+    }
+  }
+}
