@@ -25,6 +25,7 @@ import FreelancerApplications from './pages/FreelancerApplications';
 import FreelancerApplicationDetails from './pages/FreelancerApplicationDetails';
 import UserProfile from './pages/UserProfile';
 import RecommendedServices from './pages/RecommendedServices';
+import RecommendedProjects from './pages/RecommendedProjects';
 
 function App() {
   return (
@@ -93,9 +94,11 @@ function App() {
         <Route path="/freelancerapplication/:id" element={<FreelancerApplicationDetails />} />
         <Route path="/profile" element={<UserProfile />} />
         <Route path="/recommended" element={
-          <ProtectedRoute requiredRole="Client">
-            <RecommendedServices />
-          </ProtectedRoute>
+          localStorage.getItem('role') === 'Freelancer' ?
+            <RecommendedProjects /> :
+            <ProtectedRoute requiredRole="Client">
+              <RecommendedServices />
+            </ProtectedRoute>
         } />
       </Routes>
     </BrowserRouter>

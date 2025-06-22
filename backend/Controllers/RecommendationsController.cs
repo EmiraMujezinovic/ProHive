@@ -101,9 +101,10 @@ namespace backend.Controllers
             if (!int.TryParse(userIdStr, out int userId))
                 return Unauthorized();
 
-            // Get all projects from the database
+            // Get all projects from the database with status 'Open'
             var projects = await _context.Projects
                 .Include(p => p.ClientProfile).ThenInclude(cp => cp.User)
+                .Where(p => p.ProjectStatus == "Open")
                 .ToListAsync();
 
             // (Optional) Get projects already reviewed by this freelancer
@@ -140,6 +141,7 @@ namespace backend.Controllers
                     p.project.Title,
                     p.project.Description,
                     p.project.Budget,
+                    p.project.Deadline,
                     p.project.ProjectStatus,
                     Client = p.project.ClientProfile != null ? new
                     {
