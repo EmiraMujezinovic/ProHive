@@ -53,7 +53,7 @@ const ClientApplications = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-background px-4 py-8 flex flex-col items-center pt-27">
+      <div className="min-h-screen bg-gradient-to-br from-background via-secondary to-background px-4 py-8 flex flex-col items-center pt-27">
         <h1 className="text-3xl font-bold text-accent mb-10">Project Applications</h1>
         {loading && <div className="text-gray-500">Loading...</div>}
         {error && <div className="text-red-500 mb-4">{error}</div>}
@@ -64,7 +64,7 @@ const ClientApplications = () => {
           {applications.map(app => (
             <div
               key={app.applicationId}
-              className="bg-secondary/70 rounded-lg shadow-md p-5 border border-secondary flex flex-col gap-2 cursor-pointer hover:bg-accent/5 transition hover:scale-102"
+              className="bg-background rounded-lg shadow-md p-5 border border-accent hover:border-primary flex flex-col gap-2 cursor-pointer hover:bg-gray-100 transition hover:scale-102"
               onClick={() => window.location.href = `/clientapplicationdetails/${app.applicationId}`}
             >
               <span className="text-xl font-bold text-text">{app.projectTitle}</span>

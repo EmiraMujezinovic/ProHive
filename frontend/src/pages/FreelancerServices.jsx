@@ -75,7 +75,7 @@ const FreelancerServices = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-background px-6 py-8 pt-30">
+      <div className="min-h-screen bg-gradient-to-br from-background via-secondary to-background px-6 py-8 pt-28">
         <h1 className="text-3xl font-bold mb-8 text-text text-center">Your Services</h1>
         <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4">
           <SearchBar onSearch={handleSearch} />

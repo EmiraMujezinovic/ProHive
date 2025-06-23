@@ -16,7 +16,7 @@ const ReviewDisplay = ({ review, onDelete }) => (
       </div>
       {onDelete && (
         <button onClick={onDelete} title="Delete review">
-          <img src={deleteIcon} alt="Delete" className="w-6 h-6 ml-2 hover:scale-110 transition" />
+          <img src={deleteIcon} alt="Delete" className="w-6 h-6 ml-2 hover:scale-110 transition cursor-pointer" />
         </button>
       )}
     </div>

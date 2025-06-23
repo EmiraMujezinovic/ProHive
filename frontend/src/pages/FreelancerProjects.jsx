@@ -30,8 +30,8 @@ const FreelancerProjects = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-background px-4 py-8 flex flex-col items-center pt-25">
-        <h1 className="text-3xl font-bold text-primary mb-8">All Projects</h1>
+      <div className="min-h-screen bg-gradient-to-br from-background via-secondary to-background px-4 py-8 flex flex-col items-center pt-27">
+        <h1 className="text-3xl font-bold text-accent mb-8">All Projects</h1>
         {loading && <div className="text-gray-500">Loading...</div>}
         {error && <div className="text-red-500 mb-4">{error}</div>}
         <div className="w-full max-w-3xl flex flex-col gap-4">
@@ -41,11 +41,11 @@ const FreelancerProjects = () => {
           {projects.map(project => (
             <div
               key={project.projectId}
-              className="bg-white rounded-lg shadow-md p-6 border border-secondary flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 cursor-pointer hover:bg-gray-50 transition hover:scale-102"
+              className="bg-background rounded-lg shadow-md p-6 border border-accent hover:border-primary flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 cursor-pointer hover:bg-gray-100 transition hover:scale-102"
               onClick={() => navigate(`/freelancerproject/${project.projectId}`)}
             >
               <div>
-                <div className="text-xl font-bold text-primary">{project.title}</div>
+                <div className="text-xl font-bold text-text">{project.title}</div>
                 <div className="text-text mt-1">Deadline: <span className="font-semibold text-accent">{project.deadline}</span></div>
                 <div className="text-text">Budget: <span className="font-semibold text-accent">${project.budget}</span></div>
               </div>

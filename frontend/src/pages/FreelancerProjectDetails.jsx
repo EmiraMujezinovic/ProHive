@@ -73,8 +73,8 @@ const FreelancerProjectDetails = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-background px-4 py-8 flex flex-col items-center pt-25">
-        <h1 className="text-3xl font-bold text-primary mb-4">Project Details</h1>
+      <div className="min-h-screen bg-gradient-to-br from-background via-secondary to-background px-4 py-8 flex flex-col items-center pt-27">
+        <h1 className="text-3xl font-bold text-accent mb-4">Project Details</h1>
         <div className="w-full max-w-2xl flex flex-row justify-end mb-4">
           <button
             className="bg-accent text-white px-5 py-2 rounded font-semibold hover:bg-secondary hover:text-text transition shadow-md cursor-pointer"
@@ -92,7 +92,7 @@ const FreelancerProjectDetails = () => {
         )}
         {project && (
           <>
-            <div className="bg-white rounded-lg shadow-md p-8 w-full max-w-2xl border-secondary border flex flex-col gap-6">
+            <div className="bg-white rounded-lg shadow-md p-8 w-full max-w-2xl border-accent border flex flex-col gap-6">
               <div>
                 <div className="text-2xl font-bold text-primary mb-2">{project.title}</div>
                 <div className="text-text mb-2"><span className="font-semibold text-accent">Description:</span> {project.description}</div>
@@ -100,7 +100,7 @@ const FreelancerProjectDetails = () => {
                 <div className="text-text mb-2"><span className="font-semibold text-accent">Deadline:</span> {project.deadline}</div>
                 <div className="text-text mb-2"><span className="font-semibold text-accent">Status:</span> {project.projectStatus}</div>
                 {client && client.user && client.clientProfile && (
-                  <div className="mt-6 p-4 bg-background border border-secondary rounded-lg flex flex-col sm:flex-row gap-4 items-center cursor-pointer hover:shadow-lg transition"
+                  <div className="mt-6 p-4 bg-background border border-secondary rounded-lg flex flex-col sm:flex-row gap-4 items-center cursor-pointer hover:shadow-lg transition hover:border-accent"
                     onClick={() => setShowClientModal(true)}
                     title="View client details"
                   >

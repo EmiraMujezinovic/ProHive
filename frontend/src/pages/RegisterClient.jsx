@@ -151,7 +151,7 @@ const RegisterClient = () => {
 
   return (
     <div className="min-h-screen w-full flex flex-col justify-center items-center bg-gradient-to-br from-primary via-secondary to-background">
-      <form onSubmit={handleSubmit} className="max-w-lg w-full mx-auto mt-10 p-8 bg-white rounded shadow-md">
+      <form onSubmit={handleSubmit} className="max-w-lg w-full mx-auto mt-10 mb-10 p-8 bg-white rounded shadow-md">
         <h2 className="text-2xl font-bold mb-6 text-center">Register as Client</h2>
         {serverError && <div className="mb-4 text-red-600 text-center">{serverError}</div>}
         {/* Shared fields via CommonRegisterFields */}

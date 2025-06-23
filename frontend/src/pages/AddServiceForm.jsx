@@ -97,8 +97,8 @@ const AddServiceForm = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-background flex flex-col items-center justify-center pt-25 mb-10">
-        <h1 className="text-2xl font-bold text-primary mb-4">Add New Service</h1>
+      <div className="min-h-screen bg-gradient-to-br from-background via-secondary to-background flex flex-col items-center justify-center pt-27 pb-10">
+        <h1 className="text-2xl font-bold text-accent mb-4">Add New Service</h1>
         <form onSubmit={handleSubmit} className="bg-white p-8 rounded shadow-md w-full max-w-xl border border-secondary">
           <div className="mb-4">
             <label className="block mb-2 font-semibold text-primary text-xl">Title</label>

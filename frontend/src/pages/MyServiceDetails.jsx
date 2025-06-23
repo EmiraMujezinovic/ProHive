@@ -42,12 +42,12 @@ const MyServiceDetails = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-background px-4 py-8 flex flex-col items-center pt-20">
+      <div className="min-h-screen bg-gradient-to-br from-background via-secondary to-background px-4 py-8 flex flex-col items-center pt-25">
         {loading && <div className="text-gray-500">Loading...</div>}
         {error && <div className="text-red-500 mb-4">{error}</div>}
         {service && (
           <>
-          <div className="bg-white rounded-lg shadow-md p-8 w-full max-w-2xl mt-8 border-secondary border relative">
+          <div className="bg-white rounded-lg shadow-md p-8 w-full max-w-2xl mt-8 border-primary border relative">
             <div className="flex items-center justify-between mb-4">
               <h1 className="text-3xl font-bold text-primary">{service.Title || service.title}</h1>
               <div className="flex gap-3">

@@ -79,7 +79,7 @@ const ClientServiceCard = ({ title, price, category, tags, profileImageUrl, full
 
   return (
     <div
-      className="bg-white rounded-lg shadow-md p-6 flex flex-col gap-2 border border-secondary hover:shadow-lg transition hover:scale-103 cursor-pointer"
+      className="bg-background rounded-lg shadow-md p-6 flex flex-col gap-2 border border-accent hover:border-primary hover:bg-gray-100 hover:shadow-lg transition hover:scale-103 cursor-pointer"
       onClick={onClick}
     >
       <div className="flex items-center justify-between mb-2">

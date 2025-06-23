@@ -151,13 +151,12 @@ const FreelancerApplicationDetails = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-background px-4 py-8 flex flex-col items-center pt-25">
-        <h1 className="text-3xl font-bold text-primary mb-4">Application Details</h1>
+      <div className="min-h-screen bg-gradient-to-br from-background via-secondary to-background px-4 py-8 flex flex-col items-center pt-27">
+        <h1 className="text-3xl font-bold text-accent mb-4">Application Details</h1>
         {loading && <div className="text-gray-500">Loading...</div>}
         {error && <MessageModal message={error} onClose={() => setError('')} title="Error" type="error" />}
         {application && project && (
           <>
-            {/* Dugmad za akcije - odmah ispod naslova */}
             {project.projectStatus !== 'Finished' && (
               <div className="flex gap-4 mb-6 w-full max-w-2xl justify-end">
                 {(project.projectStatus === 'Open' && application.applicationStatusId === 1) && (
@@ -186,7 +185,7 @@ const FreelancerApplicationDetails = () => {
                 )}
               </div>
             )}
-            <div className="bg-white rounded-lg shadow-md p-8 w-full max-w-2xl border-secondary border flex flex-col gap-4">
+            <div className="bg-background rounded-lg shadow-md p-8 w-full max-w-2xl border-secondary border flex flex-col gap-4">
               <div className="text-2xl font-bold text-primary mb-2">{application.projectTitle}</div>
               <div className="text-text mb-2"><span className="font-semibold text-accent">Status:</span> {application.applicationStatus}</div>
               <div className="text-text mb-2"><span className="font-semibold text-accent">Proposal:</span> {application.proposal}</div>
@@ -195,7 +194,7 @@ const FreelancerApplicationDetails = () => {
               <div className="text-text mb-2"><span className="font-semibold text-accent">Deadline:</span> {project.deadline}</div>
               <div className="text-text mb-2"><span className="font-semibold text-accent">Project Status:</span> {project.projectStatus}</div>
               {client && client.user && client.clientProfile && (
-                <div className="mt-6 p-4 bg-background border border-secondary rounded-lg flex flex-col sm:flex-row gap-4 items-center cursor-pointer hover:shadow-lg transition"
+                <div className="mt-6 p-4 bg-background border border-accent rounded-lg flex flex-col sm:flex-row gap-4 items-center cursor-pointer hover:shadow-lg transition"
                   onClick={() => setShowClientModal(true)}
                   title="View client details"
                 >
@@ -217,7 +216,6 @@ const FreelancerApplicationDetails = () => {
               {showClientModal && (
                 <ClientInfoModal clientProfileId={client.clientProfile.clientProfileId} onClose={() => setShowClientModal(false)} />
               )}
-              {/* Prikaz review-a */}
               {reviewLoading ? (
                 <div className="text-gray-500">Loading review...</div>
               ) : review && review.rating ? (
@@ -228,7 +226,7 @@ const FreelancerApplicationDetails = () => {
               {/* Leave review dugme i forma */}
               {!review && !reviewLoading && application.applicationStatusId !== 1 && !showReviewForm && (
                 <button
-                  className="bg-accent text-white px-4 py-2 rounded hover:bg-accent/80 font-semibold mt-2 w-fit"
+                  className="bg-accent text-white px-4 py-2 rounded hover:bg-accent/80 font-semibold mt-2 w-fit cursor-pointer"
                   onClick={() => setShowReviewForm(true)}
                 >
                   Leave review
@@ -261,13 +259,13 @@ const FreelancerApplicationDetails = () => {
                   <div className="flex gap-3 mt-2">
                     <button
                       type="submit"
-                      className="bg-accent text-white px-4 py-2 rounded hover:bg-accent/80 font-semibold"
+                      className="bg-accent text-white px-4 py-2 rounded hover:bg-accent/80 font-semibold cursor-pointer"
                     >
                       Submit Review
                     </button>
                     <button
                       type="button"
-                      className="text-accent underline"
+                      className="text-accent underline cursor-pointer"
                       onClick={() => setShowReviewForm(false)}
                     >
                       Cancel

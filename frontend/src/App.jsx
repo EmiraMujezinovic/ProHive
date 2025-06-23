@@ -94,11 +94,14 @@ function App() {
         <Route path="/freelancerapplication/:id" element={<FreelancerApplicationDetails />} />
         <Route path="/profile" element={<UserProfile />} />
         <Route path="/recommended" element={
-          localStorage.getItem('role') === 'Freelancer' ?
-            <RecommendedProjects /> :
-            <ProtectedRoute requiredRole="Client">
-              <RecommendedServices />
-            </ProtectedRoute>
+          <ProtectedRoute requiredRole="Client">
+            <RecommendedServices />
+          </ProtectedRoute>
+        } />
+        <Route path="/recommended-projects" element={
+          <ProtectedRoute requiredRole="Freelancer">
+            <RecommendedProjects />
+          </ProtectedRoute>
         } />
       </Routes>
     </BrowserRouter>

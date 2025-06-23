@@ -34,7 +34,7 @@ const Navbar = () => {
   const userId = localStorage.getItem('userId');
   const navigate = useNavigate();
   const navLinks = [
-    { name: 'Recommended', to: '/recommended', show: true },
+    { name: 'Recommended', to: role === 'Freelancer' ? '/recommended-projects' : '/recommended', show: true },
     { name: 'Services', to: '/clientservices', show: role === 'Client' },
     { name: 'My Orders', to: '/clientorders', show: role === 'Client' },
     { name: 'My Projects', to: '/myprojects', show: role === 'Client' },

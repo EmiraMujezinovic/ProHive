@@ -96,8 +96,8 @@ const FreelancerOrders = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-background px-4 py-8 flex flex-col items-center pt-25">
-        <h1 className="text-3xl font-bold text-primary mb-8 text-center">Your Orders</h1>
+      <div className="min-h-screen bg-gradient-to-br from-background via-secondary to-background px-4 py-8 flex flex-col items-center pt-27">
+        <h1 className="text-3xl font-bold text-accent mb-8 text-center">Your Orders</h1>
         {loading && <div className="text-gray-500">Loading...</div>}
         {error && <div className="text-red-500 mb-4">{error}</div>}
         {!loading && !error && orders.length === 0 && (
@@ -109,7 +109,7 @@ const FreelancerOrders = () => {
             return (
               <div
                 key={order.orderId}
-                className="bg-white rounded-lg shadow p-4 border border-secondary flex flex-col gap-2 cursor-pointer hover:bg-accent/5 transition hover:scale-102"
+                className="bg-background rounded-lg shadow p-4 border border-primary flex flex-col gap-2 cursor-pointer hover:border-accent hover:bg-gray-100 transition hover:scale-102"
                 onClick={() => handleOrderClick(order)}
               >
                 <div className="flex flex-row items-center justify-between gap-2">
